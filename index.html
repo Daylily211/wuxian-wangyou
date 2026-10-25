@@ -19,7 +19,7 @@
     --muted: #77899e;
     --accent: #4a7fd4;
     --accent-2: #7fb0ea;
-    --accent-soft: rgba(74, 127, 212, .13);
+    --accent-soft: rgba(var(--accent-rgb, 74, 127, 212), .13);
     --sun: #e9c56f;
     --sun-soft: rgba(233, 197, 111, .22);
     --bubble-other: rgba(255, 255, 255, .9);
@@ -80,9 +80,9 @@
     opacity: .5;
     transition: opacity .3s ease;
   }
-  .blob.a { width: 540px; height: 540px; background: #a6c8f0; top: -170px; left: -130px; }
-  .blob.b { width: 500px; height: 500px; background: #7aa7e0; bottom: -190px; right: -110px; }
-  .blob.c { width: 380px; height: 380px; background: #f6e3ae; top: 38%; left: 54%; opacity: .3; }
+  .blob.a { width: 540px; height: 540px; background: var(--accent-2); top: -170px; left: -130px; }
+  .blob.b { width: 500px; height: 500px; background: var(--accent); bottom: -190px; right: -110px; }
+  .blob.c { width: 380px; height: 380px; background: var(--sun); top: 38%; left: 54%; opacity: .3; }
   html[data-theme="dark"] .blob { opacity: .16; }
 
   /* ---------- 布局 ---------- */
@@ -311,7 +311,7 @@
   }
   .decide-card:hover {
     transform: translateY(-1px);
-    border-color: rgba(74, 127, 212, .4);
+    border-color: rgba(var(--accent-rgb, 74, 127, 212), .4);
     background:
       radial-gradient(circle at 18% 20%, rgba(255, 255, 255, .7), transparent 60%),
       var(--card-hover);
@@ -665,7 +665,7 @@
     -webkit-backdrop-filter: blur(10px) saturate(120%);
   }
   .msg.me .bubble {
-    background: linear-gradient(135deg, rgba(94, 128, 172, .94), rgba(126, 155, 190, .9));
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: #fff;
     border: 1px solid rgba(255, 255, 255, .32);
     border-bottom-right-radius: 6px;
@@ -708,7 +708,7 @@
     display: grid;
     place-items: center;
     font-size: 12px;
-    background: rgba(74, 127, 212, .14);
+    background: rgba(var(--accent-rgb, 74, 127, 212), .14);
   }
   .msg.me .call-ico { background: rgba(255, 255, 255, .18); }
   .call-label { font-size: 13px; line-height: 1.5; }
@@ -775,9 +775,9 @@
     gap: 1px;
     margin: 0 0 7px;
     padding: 5px 9px 6px;
-    border-left: 2px solid rgba(74, 127, 212, .5);
+    border-left: 2px solid rgba(var(--accent-rgb, 74, 127, 212), .5);
     border-radius: 8px;
-    background: rgba(74, 127, 212, .08);
+    background: rgba(var(--accent-rgb, 74, 127, 212), .08);
     font-size: 11.5px;
     line-height: 1.5;
     max-width: 100%;
@@ -1816,7 +1816,7 @@
     display: block;
     padding: 0;
     overflow: hidden;
-    color: #fff;
+    color: var(--home-fg, #fff);
     isolation: isolate;
   }
   .home-wall {
@@ -1831,6 +1831,19 @@
   .home-wall.has-wall {
     background-size: cover;
     background-position: center;
+  }
+  .home-wall::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: .16;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+  html[data-theme="dark"] .home-wall::after {
+    opacity: .24;
+    mix-blend-mode: screen;
   }
   .home-rain { opacity: .5; border-radius: 0; }
   html[data-theme="dark"] .home-rain { opacity: .3; }
@@ -2139,7 +2152,7 @@
     border: 1px solid rgba(255, 255, 255, .26);
     background: rgba(255, 255, 255, .15);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 14px 30px -24px rgba(8, 26, 52, .8);
-    color: #fff;
+    color: var(--home-fg, #fff);
     font: inherit;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -2569,7 +2582,7 @@
     padding: 0;
     border: 0;
     background: none;
-    color: #fff;
+    color: var(--home-fg, #fff);
     font: inherit;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -2577,31 +2590,41 @@
   .app-art {
     width: 62px;
     height: 62px;
-    border-radius: 19px;
+    border-radius: 18px;
     display: grid;
     place-items: center;
-    font-size: 30px;
-    line-height: 1;
     overflow: hidden;
     position: relative;
-    box-shadow:
-      0 12px 22px -12px rgba(10, 30, 60, .6),
-      inset 0 1px 0 rgba(255, 255, 255, .5);
-    transition: transform .16s ease, box-shadow .16s ease;
+    color: var(--app-icon-fg, #fff);
+    background: var(--app-icon-bg, var(--accent));
+    box-shadow: none;
+    transition: transform .16s ease;
+  }
+  .app-art svg {
+    width: 29px;
+    height: 29px;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .app-art.has-img { background: #fff; }
-  .app-art img {
+  .app-art.has-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: inherit;
   }
   .app-icon:active .app-art { transform: scale(.93); }
-  .app-icon:hover .app-art { box-shadow: 0 16px 26px -12px rgba(10, 30, 60, .65), inset 0 1px 0 rgba(255, 255, 255, .5); }
+  .app-icon:hover .app-art { box-shadow: none; }
   .app-name {
     font-size: 11px;
     line-height: 1.2;
     white-space: nowrap;
+    color: var(--home-fg, #fff);
     text-shadow: 0 1px 5px rgba(20, 45, 80, .4);
     opacity: .95;
   }
@@ -2613,15 +2636,15 @@
     height: 19px;
     padding: 0 5px;
     border-radius: 99px;
-    background: #e26a55;
+    background: var(--accent);
     color: #fff;
     font-size: 10.5px;
     font-weight: 650;
     line-height: 1;
     display: grid;
     place-items: center;
-    border: 1.5px solid rgba(255, 255, 255, .85);
-    box-shadow: 0 3px 8px -3px rgba(120, 40, 30, .55);
+    border: 1.5px solid rgba(255, 255, 255, .9);
+    box-shadow: 0 3px 8px -3px rgba(0, 0, 0, .35);
   }
   .tint-blue { background: linear-gradient(160deg, #86b4ec, #4a7fd4); }
   .tint-violet { background: linear-gradient(160deg, #bcc0f1, #7f83d6); }
@@ -2831,7 +2854,7 @@
     cursor: pointer;
     transition: background .16s, border-color .16s, transform .16s;
   }
-  .set-row:hover { background: var(--card-hover); border-color: rgba(74, 127, 212, .28); }
+  .set-row:hover { background: var(--card-hover); border-color: rgba(var(--accent-rgb, 74, 127, 212), .28); }
   .set-row:active { transform: scale(.99); }
   .set-ico {
     width: 34px;
@@ -2941,10 +2964,46 @@
     cursor: pointer;
     transition: background .15s, border-color .15s;
   }
-  .pat-pick:hover { background: var(--card-hover); border-color: rgba(74, 127, 212, .35); }
+  .pat-pick:hover { background: var(--card-hover); border-color: rgba(var(--accent-rgb, 74, 127, 212), .35); }
   .pat-pick .pp-emoji { font-size: 15px; filter: saturate(.9); }
 
-  /* ---------- 壁纸色板 ---------- */
+  /* ---------- 壁纸色板 / 全局色调 ---------- */
+  .accent-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .accent-row .set-main { min-width: 0; }
+  .accent-row #accentReset {
+    flex: 0 0 auto;
+    padding: 6px 9px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--chip);
+    color: var(--muted);
+    font-size: 10.5px;
+  }
+  .accent-row #accentReset:disabled { opacity: .45; }
+  .accent-picker {
+    width: 44px;
+    height: 34px;
+    flex: 0 0 auto;
+    padding: 2px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .accent-picker::-webkit-color-swatch-wrapper { padding: 0; }
+  .accent-picker::-webkit-color-swatch {
+    border: 0;
+    border-radius: 7px;
+  }
+  .accent-picker::-moz-color-swatch {
+    border: 0;
+    border-radius: 7px;
+  }
+  .accent-swatches { margin-top: 10px; }
   .wall-swatches {
     display: flex;
     flex-wrap: wrap;
@@ -3136,6 +3195,130 @@
     letter-spacing: .03em;
     color: rgba(255, 255, 255, .44);
   }
+  .call-minimize {
+    position: absolute;
+    top: calc(16px + env(safe-area-inset-top));
+    right: 16px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, .1);
+    color: rgba(255, 255, 255, .86);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background .15s, transform .15s;
+  }
+  .call-minimize:hover { background: rgba(255, 255, 255, .18); }
+  .call-minimize:active { transform: scale(.94); }
+  .call-minimize svg { width: 18px; height: 18px; }
+  .call-minimize[hidden] { display: none; }
+
+  .call-mini {
+    position: absolute;
+    right: 16px;
+    bottom: calc(92px + env(safe-area-inset-bottom));
+    z-index: 140;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: min(204px, calc(100% - 32px));
+    padding: 6px 7px;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 17px;
+    background: linear-gradient(145deg, rgba(27, 48, 76, .96), rgba(11, 22, 38, .97));
+    color: #fff;
+    box-shadow: 0 18px 36px -18px rgba(0, 0, 0, .75), inset 0 1px 0 rgba(255, 255, 255, .12);
+    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity .2s ease, visibility .2s, transform .2s ease;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .call-mini.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+  .call-mini.dragging {
+    cursor: grabbing;
+    transition: none;
+    box-shadow: 0 22px 42px -18px rgba(0, 0, 0, .85), inset 0 1px 0 rgba(255, 255, 255, .16);
+  }
+  .call-mini-return {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: inherit;
+  }
+  .call-mini-return .avatar {
+    width: 31px;
+    height: 31px;
+    font-size: 15px;
+    flex: 0 0 auto;
+    border: 1.5px solid rgba(255, 255, 255, .55);
+    background: rgba(255, 255, 255, .16);
+  }
+  .call-mini-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .call-mini-info b {
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .call-mini-info span {
+    font-size: 9px;
+    line-height: 1.3;
+    color: rgba(225, 240, 255, .62);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .call-mini-hangup {
+    width: 27px;
+    height: 27px;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, #f4756f, #d13c37);
+    color: #fff;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 8px 16px -10px rgba(0, 0, 0, .8);
+    transition: transform .14s, filter .14s;
+  }
+  .call-mini-hangup:hover { filter: brightness(1.06); }
+  .call-mini-hangup:active { transform: scale(.92); }
 
   /* ---------- 图标编辑浮层 ---------- */
   .overlay-sheet {
@@ -3268,23 +3451,23 @@
   .composer-box { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7); }
 
   .memo-widget {
-    border: 1px solid rgba(213, 231, 249, .58);
-    background: linear-gradient(155deg, rgba(206, 225, 246, .86), rgba(176, 204, 235, .76));
-    color: #2f4662;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .42), 0 10px 24px -28px rgba(25, 55, 95, .55);
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, var(--page-tint-2), var(--page-tint));
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .42), 0 10px 24px -28px rgba(0, 0, 0, .45);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  .memo-widget .widget-cap { color: rgba(51, 80, 114, .62); }
-  .memo-widget .memo-hint { color: rgba(51, 80, 114, .48); }
+  .memo-widget .widget-cap { color: var(--muted); }
+  .memo-widget .memo-hint { color: var(--muted); opacity: .8; }
   html[data-theme="dark"] .memo-widget {
-    border-color: rgba(190, 216, 246, .22);
-    background: linear-gradient(155deg, rgba(78, 108, 146, .56), rgba(52, 79, 112, .5));
-    color: #edf5ff;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+    border-color: var(--line);
+    background: linear-gradient(155deg, var(--page-tint-2), var(--page-tint));
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
   }
-  html[data-theme="dark"] .memo-widget .widget-cap { color: rgba(226, 240, 255, .66); }
-  html[data-theme="dark"] .memo-widget .memo-hint { color: rgba(226, 240, 255, .46); }
+  html[data-theme="dark"] .memo-widget .widget-cap { color: var(--muted); }
+  html[data-theme="dark"] .memo-widget .memo-hint { color: var(--muted); opacity: .8; }
 
   .home-duo {
     display: grid;
@@ -3529,7 +3712,7 @@
     font-size: 12px;
     cursor: pointer;
   }
-  .stat-tab.is-on { background: var(--accent-soft); color: var(--accent); border-color: rgba(74, 127, 212, .4); }
+  .stat-tab.is-on { background: var(--accent-soft); color: var(--accent); border-color: rgba(var(--accent-rgb, 74, 127, 212), .4); }
   .word-cloud { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; min-height: 60px; padding: 6px 0; }
   .word-cloud span {
     color: var(--accent);
@@ -3717,7 +3900,21 @@
     height: 46px;
     font-size: 21px;
     border-radius: 15px;
+    background: var(--app-icon-bg, #fff);
+    color: var(--app-icon-fg, var(--accent));
+    border: 0;
+    box-shadow: none;
   }
+  .fn-art svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  html[data-theme="dark"] .fn-art { box-shadow: none; }
   .chat.panel-open .fn-panel { max-height: 300px; }
 
   /* 问卷列表 */
@@ -3760,7 +3957,7 @@
     border-radius: 19px;
     border: 1px solid var(--line);
     background:
-      radial-gradient(circle at 92% 12%, rgba(74, 127, 212, .1), transparent 46%),
+      radial-gradient(circle at 92% 12%, rgba(var(--accent-rgb, 74, 127, 212), .1), transparent 46%),
       var(--card);
     color: var(--ink);
     font: inherit;
@@ -3770,9 +3967,9 @@
   }
   .survey-card:hover {
     background:
-      radial-gradient(circle at 92% 12%, rgba(74, 127, 212, .16), transparent 46%),
+      radial-gradient(circle at 92% 12%, rgba(var(--accent-rgb, 74, 127, 212), .16), transparent 46%),
       var(--card-hover);
-    border-color: rgba(74, 127, 212, .32);
+    border-color: rgba(var(--accent-rgb, 74, 127, 212), .32);
     box-shadow: 0 12px 24px -22px rgba(30, 70, 140, .6);
   }
   .survey-card:active { transform: scale(.99); }
@@ -3958,7 +4155,7 @@
   }
   .survey-history-item:hover {
     background: var(--card-hover);
-    border-color: rgba(74, 127, 212, .3);
+    border-color: rgba(var(--accent-rgb, 74, 127, 212), .3);
   }
   .survey-history-item:active { transform: scale(.995); }
   .survey-history-item::after {
@@ -4031,7 +4228,7 @@
     border: 1px solid var(--line);
     border-radius: 18px;
     background:
-      radial-gradient(circle at 88% 20%, rgba(74, 127, 212, .15), transparent 48%),
+      radial-gradient(circle at 88% 20%, rgba(var(--accent-rgb, 74, 127, 212), .15), transparent 48%),
       var(--card);
   }
   .survey-result-score {
@@ -4196,12 +4393,12 @@
     will-change: transform;
   }
   .word-cloud span.wc-top {
-    color: #3f74c8;
+    color: var(--accent);
     font-weight: 750;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .55), 0 6px 18px rgba(74, 127, 212, .14);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .55), 0 6px 18px rgba(var(--accent-rgb, 74, 127, 212), .14);
   }
   html[data-theme="dark"] .word-cloud span.wc-top {
-    color: #b9d7ff;
+    color: var(--accent);
     text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
   }
   .word-cloud .list-empty {
@@ -4293,8 +4490,8 @@
   /* ---------- 第十一批：浅蓝色朋友圈 / 我的主页 ---------- */
   .tab-view[data-tab="moments"],
   .tab-view[data-tab="me"] {
-    color: #1f2f42;
-    background: linear-gradient(180deg, #f8fcff 0%, #eef7ff 100%);
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--page-tint-2) 0%, var(--page-tint) 100%);
   }
   .tab-view[data-tab="moments"] .view-bg,
   .tab-view[data-tab="me"] .view-bg { display: none; }
@@ -4302,20 +4499,20 @@
   .mh-cover,
   .me-cover {
     box-shadow: none;
-    border-bottom: 1px solid rgba(74, 127, 212, .07);
+    border-bottom: 1px solid var(--line);
   }
-  .mh-cover { background: #dcecff; }
-  .me-cover:not(.has-img) { background: linear-gradient(160deg, #e6f3ff, #c7dff7); }
+  .mh-cover { background: var(--theme-cover); }
+  .me-cover:not(.has-img) { background: var(--theme-cover); }
   .mh-cover::after { display: none; }
   .me-cover::after,
   .me-cover.has-img::after {
-    background: linear-gradient(180deg, rgba(248, 252, 255, .02) 0%, rgba(245, 250, 255, .56) 62%, #f5faff 100%);
+    background: linear-gradient(180deg, transparent 0%, var(--page-tint) 62%, var(--page-tint) 100%);
   }
-  .me-cover.has-img { background-color: #eaf4ff; }
+  .me-cover.has-img { background-color: var(--page-tint); }
   .mh-avatar,
   .me-avatar {
-    border-color: rgba(255, 255, 255, .96);
-    box-shadow: 0 5px 12px -10px rgba(38, 74, 116, .5);
+    border-color: rgba(255, 255, 255, .92);
+    box-shadow: 0 5px 12px -10px rgba(0, 0, 0, .4);
   }
   .mh-row {
     position: relative;
@@ -4326,50 +4523,50 @@
     z-index: 20;
   }
   .mh-text b {
-    color: #213a58;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
+    color: var(--ink);
+    text-shadow: 0 1px 3px rgba(255, 255, 255, .35);
   }
-  .mh-text span { color: #627b95; }
+  .mh-text span { color: var(--muted); }
   .mh-post {
-    border-color: rgba(74, 127, 212, .18);
-    background: rgba(255, 255, 255, .68);
+    border-color: var(--line);
+    background: var(--theme-card);
     color: var(--accent);
-    box-shadow: 0 4px 10px -10px rgba(38, 74, 116, .35);
+    box-shadow: 0 4px 10px -10px rgba(0, 0, 0, .3);
   }
-  .mh-post:active { background: rgba(255, 255, 255, .9); }
+  .mh-post:active { background: var(--card-hover); }
 
   .moment-card {
-    border-color: rgba(74, 127, 212, .12);
-    background: rgba(255, 255, 255, .8);
-    box-shadow: 0 6px 14px -18px rgba(38, 74, 116, .45);
+    border-color: var(--line);
+    background: var(--theme-card);
+    box-shadow: 0 6px 14px -18px rgba(0, 0, 0, .35);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
   .moment-card > .avatar {
-    border-color: rgba(74, 127, 212, .14);
-    background: #eaf4ff;
+    border-color: var(--line);
+    background: var(--avatar-bg);
   }
-  .moment-top b { color: #253b55; }
-  .moment-top span { color: #7b90a6; }
-  .moment-text { color: #31475f; }
+  .moment-top b { color: var(--ink); }
+  .moment-top span { color: var(--muted); }
+  .moment-text { color: var(--ink); }
   .moment-like {
-    border-color: rgba(74, 127, 212, .14);
-    background: rgba(74, 127, 212, .055);
-    color: #5e7d9e;
+    border-color: var(--line);
+    background: var(--chip);
+    color: var(--muted);
   }
   .moment-like.on {
     border-color: transparent;
     background: var(--accent);
     color: #fff;
   }
-  .moment-likers { color: #8094a9; }
-  .moment-comments { background: #eef7ff; }
-  .moment-comment { color: #3b5269; }
+  .moment-likers { color: var(--muted); }
+  .moment-comments { background: var(--chip); }
+  .moment-comment { color: var(--ink); }
   .moment-comment b { color: var(--accent); }
   .moment-empty {
-    border-color: rgba(74, 127, 212, .18);
-    color: #748aa0;
-    background: rgba(255, 255, 255, .52);
+    border-color: var(--line);
+    color: var(--muted);
+    background: var(--theme-card);
   }
 
   /* 浅色页面的水珠：只在壁纸之上、所有内容之下 */
@@ -4384,7 +4581,7 @@
     height: 76px;
     animation-name: lightDropFall;
     animation-duration: 14s;
-    background: linear-gradient(to bottom, transparent, rgba(74, 127, 212, .14) 58%, rgba(74, 127, 212, .66));
+    background: linear-gradient(to bottom, transparent, rgba(var(--drop-rgb, 74, 127, 212), .14) 58%, rgba(var(--drop-rgb, 74, 127, 212), .66));
     filter: none;
   }
   @keyframes lightDropFall {
@@ -4415,18 +4612,18 @@
   .tab-view[data-tab="me"] .rain-glass i::after {
     width: 8px;
     height: 9px;
-    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .98), rgba(92, 143, 204, .62) 58%, transparent 76%);
-    box-shadow: 0 1px 3px rgba(60, 100, 150, .2);
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .98), rgba(var(--drop-rgb, 74, 127, 212), .72) 58%, transparent 76%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .16);
   }
 
   .tab-view[data-tab="moments"] .rain-glass::before,
   .tab-view[data-tab="me"] .rain-glass::before { opacity: .32; }
 
-  .me-id b { color: #213a58; text-shadow: 0 1px 0 rgba(255, 255, 255, .55); }
+  .me-id b { color: var(--ink); text-shadow: 0 1px 3px rgba(255, 255, 255, .35); }
   .me-id span {
     color: var(--accent);
-    background: rgba(255, 255, 255, .82);
-    border: 1px solid rgba(74, 127, 212, .12);
+    background: var(--theme-card);
+    border: 1px solid var(--line);
   }
   .me-card {
     padding: 0 2px;
@@ -4437,8 +4634,8 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .me-sig-label { color: #7b90a6; margin-bottom: 5px; }
-  .me-signature { color: #31475f; }
+  .me-sig-label { color: var(--muted); margin-bottom: 5px; }
+  .me-signature { color: var(--ink); }
   .me-stats {
     display: flex;
     align-items: center;
@@ -4447,7 +4644,7 @@
     margin: 12px 0 0;
     font-size: 11.5px;
     line-height: 1.6;
-    color: #7b90a6;
+    color: var(--muted);
     font-variant-numeric: tabular-nums;
   }
   .me-stats b {
@@ -4458,14 +4655,64 @@
   }
   .me-menu { gap: 7px; }
   .menu-row {
-    border-color: rgba(74, 127, 212, .12);
-    background: rgba(255, 255, 255, .8);
-    color: #253b55;
-    box-shadow: 0 5px 12px -18px rgba(38, 74, 116, .38);
+    border-color: var(--line);
+    background: var(--theme-card);
+    color: var(--ink);
+    box-shadow: 0 5px 12px -18px rgba(0, 0, 0, .28);
   }
-  .menu-row:hover { background: rgba(255, 255, 255, .96); }
-  .menu-row:active { background: #eaf4ff; }
-  .menu-row .mr-sub { color: #8094a9; }
+  .menu-row:hover { background: var(--card-hover); }
+  .menu-row:active { background: var(--chip); }
+  .menu-row .mr-sub { color: var(--muted); }
+
+  /* 全局色调：聊天页底色也跟随强调色 */
+  .chat {
+    background:
+      linear-gradient(150deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, 0) 42%),
+      linear-gradient(180deg, var(--page-tint-2), var(--bg) 46%, var(--page-tint));
+  }
+  html[data-theme="dark"] .chat {
+    background:
+      linear-gradient(150deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, 0) 42%),
+      linear-gradient(180deg, var(--page-tint-2), var(--bg) 48%, var(--page-tint));
+  }
+
+  /* 全局色调：所有水珠与拖尾跟随强调色 */
+  .rain-glass i {
+    background: linear-gradient(to bottom, transparent, rgba(var(--drop-rgb, 176, 201, 235), .3) 70%, rgba(var(--drop-rgb, 176, 201, 235), .82));
+    filter: none;
+  }
+  .rain-glass i::after {
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .98), rgba(var(--drop-rgb, 176, 201, 235), .82) 58%, transparent 76%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .14);
+  }
+  .phone[data-drops="star"] .rain-glass i::after {
+    background: radial-gradient(circle at 46% 42%, #fff, rgba(var(--drop-rgb, 176, 201, 235), .92) 58%, rgba(var(--drop-rgb, 176, 201, 235), .55) 86%);
+    filter: drop-shadow(0 0 3px rgba(var(--drop-rgb, 176, 201, 235), .6));
+  }
+
+  /* “两人 / App”页深色模式 */
+  html[data-theme="dark"] .tab-view[data-tab="couple"],
+  html[data-theme="dark"] .tab-view[data-tab="apps"] {
+    background: linear-gradient(180deg, rgba(9, 16, 27, .48) 0%, rgba(7, 13, 23, .74) 100%);
+  }
+  html[data-theme="dark"] .tab-view[data-tab="couple"] .pair-widget {
+    border-color: rgba(190, 216, 246, .12);
+    background: rgba(190, 216, 246, .06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 14px 30px -24px rgba(0, 0, 0, .85);
+  }
+  html[data-theme="dark"] .tab-view[data-tab="couple"] .pair-widget:hover {
+    background: rgba(190, 216, 246, .1);
+  }
+  html[data-theme="dark"] .tab-view[data-tab="couple"] .device-widget,
+  html[data-theme="dark"] .tab-view[data-tab="couple"] .music-widget {
+    border-color: rgba(190, 216, 246, .12);
+    background: rgba(190, 216, 246, .06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+  }
+  html[data-theme="dark"] .tab-view[data-tab="apps"] .home-stats span {
+    border-color: rgba(190, 216, 246, .14);
+    background: rgba(190, 216, 246, .08);
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -4552,7 +4799,7 @@
         <span class="home-brand">✦ 应用</span>
         <div class="home-stats" id="homeStats"></div>
         <div class="app-grid" id="appGrid"></div>
-        <p class="home-tip">长按图标可以换成自己的图片</p>
+        <p class="home-tip">长按图标可换图 · 默认双色跟随全局色调</p>
       </div>
 
       <div class="tab-view" data-tab="moments" aria-label="朋友圈">
@@ -4669,11 +4916,11 @@
       </form>
       <div class="fn-panel" id="fnPanel" aria-hidden="true">
         <div class="fn-grid">
-          <button class="fn-item" type="button" data-action="call"><span class="fn-art">📞</span><span>语音通话</span></button>
-          <button class="fn-item" type="button" data-action="pat"><span class="fn-art">👋</span><span>拍一拍</span></button>
-          <button class="fn-item" type="button" data-app="decide"><span class="fn-art">⚖️</span><span>帮我决定</span></button>
-          <button class="fn-item" type="button" data-app="survey"><span class="fn-art">📋</span><span>问卷</span></button>
-          <button class="fn-item" type="button" data-app="gift"><span class="fn-art">🎁</span><span>礼物</span></button>
+          <button class="fn-item" type="button" data-action="call"><span class="fn-art"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.5a13 13 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"/></svg></span><span>语音通话</span></button>
+          <button class="fn-item" type="button" data-action="pat"><span class="fn-art"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V12M17 8.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a7 7 0 0 1-5.5-2.7L4 13.5a1.6 1.6 0 0 1 2.3-2.2L8 13"/></svg></span><span>拍一拍</span></button>
+          <button class="fn-item" type="button" data-app="decide"><span class="fn-art"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M4.5 7h15"/><path d="M5 7 2 14h6L5 7Zm14 0-3 7h6l-3-7Z"/></svg></span><span>帮我决定</span></button>
+          <button class="fn-item" type="button" data-app="survey"><span class="fn-art"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8 9h8M8 13h8M8 17h5"/></svg></span><span>问卷</span></button>
+          <button class="fn-item" type="button" data-app="gift"><span class="fn-art"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18v4H3zM12 9v11M12 9C9 9 7 8 7 6a2 2 0 0 1 4-1c.6 1 .6 2 1 4Zm0 0c3 0 5-1 5-3a2 2 0 0 0-4-1c-.6 1-.6 2-1 4Z"/></svg></span><span>礼物</span></button>
         </div>
       </div>
     </section>
@@ -4838,6 +5085,20 @@
             </span>
             <input type="checkbox" id="setTheme">
           </label>
+
+          <div class="settings-group">
+            <h3>全局色调</h3>
+            <div class="accent-row">
+              <input type="color" class="accent-picker" id="accentPicker" value="#4a7fd4" aria-label="选择全局色调">
+              <div class="set-main">
+                <span class="set-title">全局强调色</span>
+                <span class="set-sub" id="accentState">雾蓝</span>
+              </div>
+              <button class="btn small ghost" id="accentReset" type="button">恢复默认</button>
+            </div>
+            <div class="wall-swatches accent-swatches" id="accentSwatches" role="group" aria-label="预设全局色调"></div>
+            <p class="hint">按钮、选中态、链接、词云等强调色会一起改变；也可以直接用取色器挑一个颜色。</p>
+          </div>
 
           <div class="settings-group">
             <h3>主屏幕壁纸</h3>
@@ -5512,6 +5773,9 @@
   <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
   <div class="call-overlay" id="callOverlay" aria-hidden="true">
+    <button class="call-minimize" id="callMinimize" type="button" aria-label="最小化通话" title="最小化" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg>
+    </button>
     <div class="call-card" role="dialog" aria-modal="true" aria-label="语音通话">
       <div class="avatar call-avatar" id="callAvatar"></div>
       <div class="call-name" id="callName">TA</div>
@@ -5524,6 +5788,17 @@
       </div>
       <div class="call-hint" id="callHint"></div>
     </div>
+  </div>
+
+  <div class="call-mini" id="callMini" aria-hidden="true" aria-label="通话已最小化">
+    <button class="call-mini-return" id="callMiniReturn" type="button" aria-label="返回通话">
+      <span class="avatar" id="callMiniAvatar"></span>
+      <span class="call-mini-info">
+        <b id="callMiniName">TA</b>
+        <span id="callMiniStatus">通话中 · 00:00</span>
+      </span>
+    </button>
+    <button class="call-mini-hangup" id="callMiniHangup" type="button" aria-label="挂断">✕</button>
   </div>
 
   <div class="overlay-sheet" id="iconSheet" aria-hidden="true">
@@ -5723,8 +5998,25 @@ const APPS = [
   { id: 'settings', name: '设置', emoji: '⚙️', tint: 'slate' }
 ];
 
+const APP_GLYPHS = {
+  chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 9.3 9.3 0 0 1-2.6-.4L5 21l1.3-3.7A7 7 0 0 1 4 11.5 7.5 7.5 0 0 1 12 4a7.5 7.5 0 0 1 8 7.5Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg>',
+  cards: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="11" height="16" rx="2"/><path d="M8 4v16M16 7h4v13H9"/></svg>',
+  decide: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M4.5 7h15"/><path d="M5 7 2 14h6L5 7Zm14 0-3 7h6l-3-7Z"/></svg>',
+  pat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V12M17 8.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a7 7 0 0 1-5.5-2.7L4 13.5a1.6 1.6 0 0 1 2.3-2.2L8 13"/></svg>',
+  survey: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8 9h8M8 13h8M8 17h5"/></svg>',
+  gift: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18v4H3zM12 9v11M12 9C9 9 7 8 7 6a2 2 0 0 1 4-1c.6 1 .6 2 1 4Zm0 0c3 0 5-1 5-3a2 2 0 0 0-4-1c-.6 1-.6 2-1 4Z"/></svg>',
+  stats: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>',
+  favorites: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>',
+  anniversary: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M5 21v-7h14v7M8 14v-3M12 14V9M16 14v-3"/><path d="M8 8.5c0-.8 1-1.5 1-2.5M12 6c0-.8 1-1.5 1-2.5M16 8.5c0-.8 1-1.5 1-2.5"/></svg>',
+  tarot: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="6"/><path d="M9 20h6M12 16v4M12 4V2M6 10H4M20 10h-2"/></svg>',
+  profile: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-4 3.4-6 7-6s6.2 2 7 6"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>'
+};
+
 const WALL_COLORS = [
   { value: '#5b88cc', name: '雾蓝' },
+  { value: '#8fbde8', name: '浅蓝' },
   { value: '#3f6ea8', name: '深海' },
   { value: '#233650', name: '夜航' },
   { value: '#4f7f76', name: '松林' },
@@ -5732,6 +6024,17 @@ const WALL_COLORS = [
   { value: '#b26a7d', name: '玫瑰' },
   { value: '#c1854f', name: '晚霞' },
   { value: '#5a6472', name: '石墨' }
+];
+
+const DEFAULT_ACCENT = '#4a7fd4';
+const ACCENT_PRESETS = [
+  { value: '#4a7fd4', name: '雾蓝' },
+  { value: '#7b6bc4', name: '暮紫' },
+  { value: '#ff5ca8', name: '亮粉' },
+  { value: '#c06a8a', name: '玫瑰' },
+  { value: '#4f8f7a', name: '松绿' },
+  { value: '#c1854f', name: '晚霞' },
+  { value: '#4f93b8', name: '青蓝' }
 ];
 
 const FREQ_RANGES = {
@@ -5940,7 +6243,7 @@ function freshState() {
       signature: '把想说的话，先说给自己听。'
     },
     other: {
-      name: '小满',
+      name: '无限',
       avatar: '🌻',
       avatarImg: '',
       status: '在线',
@@ -5951,6 +6254,7 @@ function freshState() {
     appIcons: APPS.reduce((acc, app) => { acc[app.id] = ''; return acc; }, {}),
     wallpaper: '',
     wallColor: WALL_COLORS[0].value,
+    accentColor: '#4a7fd4',
     dropStyle: 'drop',
     sounds: { send: '', receive: '' },
     anniversary: { start: '', items: [] },
@@ -5994,6 +6298,7 @@ function loadState() {
       receive: data.sounds && typeof data.sounds.receive === 'string' && data.sounds.receive.startsWith('data:audio/') ? data.sounds.receive : ''
     };
     next.wallColor = WALL_COLORS.some((c) => c.value === data.wallColor) ? data.wallColor : base.wallColor;
+    next.accentColor = /^#[0-9a-f]{6}$/i.test(String(data.accentColor || '')) ? String(data.accentColor).toLowerCase() : base.accentColor;
     next.loveNote = typeof data.loveNote === 'string' ? data.loveNote.slice(0, 200) : base.loveNote;
     const storedMusic = data.music && typeof data.music === 'object' ? data.music : {};
     next.music = {
@@ -6151,6 +6456,8 @@ function loadState() {
     next.settings.momentChance = clamp(Number(next.settings.momentChance), 0, 100);
     if (!Number.isFinite(Number(storedSettings.momentChance))) next.settings.momentChance = 55;
 
+    if (next.other.name === '小满') next.other.name = '无限';
+    next.other.name = String(next.other.name || '无限').slice(0, 20);
     next.other.status = String(next.other.status || '在线').slice(0, 20);
     next.statusPool = Array.isArray(data.statusPool)
       ? data.statusPool.filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim().slice(0, 20)).slice(0, 60)
@@ -6279,6 +6586,13 @@ const callAcceptBtn = $('#callAccept');
 const callDeclineBtn = $('#callDecline');
 const callHangupBtn = $('#callHangup');
 const callHintEl = $('#callHint');
+const callMinimizeBtn = $('#callMinimize');
+const callMini = $('#callMini');
+const callMiniAvatar = $('#callMiniAvatar');
+const callMiniName = $('#callMiniName');
+const callMiniStatus = $('#callMiniStatus');
+const callMiniReturn = $('#callMiniReturn');
+const callMiniHangup = $('#callMiniHangup');
 const tabViewEls = new Map();
 $$('.tab-view').forEach((el) => tabViewEls.set(el.dataset.tab, el));
 const tabButtons = $$('[data-home-tab]');
@@ -6334,6 +6648,7 @@ let audioCtx = null;
 const callState = {
   phase: 'idle',
   direction: 'out',
+  minimized: false,
   startedAt: 0,
   timer: null,
   ring: null,
@@ -6358,10 +6673,112 @@ function save() {
 }
 
 /* ---------------- 主题 ---------------- */
+function normalizeAccent(value) {
+  return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? String(value).toLowerCase() : DEFAULT_ACCENT;
+}
+
+function hexToRgb(hex) {
+  const value = normalizeAccent(hex).slice(1);
+  return {
+    r: parseInt(value.slice(0, 2), 16),
+    g: parseInt(value.slice(2, 4), 16),
+    b: parseInt(value.slice(4, 6), 16)
+  };
+}
+
+function mixHex(hex, target, amount) {
+  const source = hexToRgb(hex);
+  const ratio = clamp(Number(amount) || 0, 0, 1);
+  const channel = (from, to) => Math.round(from + (to - from) * ratio).toString(16).padStart(2, '0');
+  return '#' + channel(source.r, target.r) + channel(source.g, target.g) + channel(source.b, target.b);
+}
+
+function applyGlobalAccent() {
+  const raw = normalizeAccent(state.accentColor);
+  const dark = document.documentElement.dataset.theme === 'dark';
+  const white = { r: 255, g: 255, b: 255 };
+  const rgb = hexToRgb(raw);
+  const rgba = (hex, alpha) => {
+    const color = hexToRgb(hex);
+    return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
+  };
+  const root = document.documentElement;
+  const vars = {};
+
+  if (dark) {
+    const bg = mixHex(raw, { r: 13, g: 20, b: 32 }, 0.87);
+    const solid = mixHex(raw, { r: 19, g: 28, b: 41 }, 0.85);
+    const cardTone = mixHex(raw, white, 0.48);
+    const accent = mixHex(raw, white, 0.2);
+    const accent2 = mixHex(raw, white, 0.34);
+    const drop = mixHex(raw, white, 0.72);
+    const cover = mixHex(raw, { r: 13, g: 20, b: 32 }, 0.8);
+    vars['--bg'] = bg;
+    vars['--surface'] = rgba(solid, 0.74);
+    vars['--surface-solid'] = solid;
+    vars['--card'] = rgba(cardTone, 0.07);
+    vars['--card-hover'] = rgba(cardTone, 0.12);
+    vars['--chip'] = rgba(cardTone, 0.08);
+    vars['--line'] = rgba(cardTone, 0.15);
+    vars['--ink'] = mixHex('#e6eef8', rgb, 0.08);
+    vars['--muted'] = mixHex('#90a3b8', rgb, 0.14);
+    vars['--accent'] = accent;
+    vars['--accent-2'] = accent2;
+    vars['--accent-soft'] = rgba(raw, 0.2);
+    vars['--bubble-other'] = rgba(cardTone, 0.08);
+    vars['--avatar-bg'] = mixHex(raw, { r: 26, g: 39, b: 54 }, 0.84);
+    vars['--page-tint'] = mixHex(raw, { r: 13, g: 20, b: 32 }, 0.86);
+    vars['--page-tint-2'] = mixHex(raw, { r: 13, g: 20, b: 32 }, 0.93);
+    vars['--theme-card'] = rgba(cardTone, 0.08);
+    vars['--theme-cover'] = cover;
+    vars['--app-icon-bg'] = mixHex(raw, { r: 13, g: 20, b: 32 }, 0.78);
+    vars['--app-icon-fg'] = accent;
+    vars['--drop-rgb'] = `${hexToRgb(drop).r}, ${hexToRgb(drop).g}, ${hexToRgb(drop).b}`;
+    vars['--home-fg'] = mixHex(raw, white, 0.9);
+    vars['--shadow'] = `0 24px 60px -30px rgba(0, 0, 0, .75), 0 2px 6px rgba(0, 0, 0, .2)`;
+  } else {
+    const bg = mixHex(raw, white, 0.9);
+    const solid = mixHex(raw, white, 0.965);
+    const surface = mixHex(raw, white, 0.94);
+    const cardTone = mixHex(raw, white, 0.97);
+    const accent2 = mixHex(raw, white, 0.19);
+    const drop = mixHex(raw, white, 0.55);
+    const cover = mixHex(raw, white, 0.82);
+    vars['--bg'] = bg;
+    vars['--surface'] = rgba(surface, 0.68);
+    vars['--surface-solid'] = solid;
+    vars['--card'] = rgba(cardTone, 0.64);
+    vars['--card-hover'] = rgba(cardTone, 0.96);
+    vars['--chip'] = rgba(raw, 0.075);
+    vars['--line'] = rgba(raw, 0.16);
+    vars['--ink'] = mixHex('#1f2f42', rgb, 0.12);
+    vars['--muted'] = mixHex('#77899e', rgb, 0.18);
+    vars['--accent'] = raw;
+    vars['--accent-2'] = accent2;
+    vars['--accent-soft'] = rgba(raw, 0.13);
+    vars['--bubble-other'] = rgba('#ffffff', 0.9);
+    vars['--avatar-bg'] = mixHex(raw, white, 0.86);
+    vars['--page-tint'] = mixHex(raw, white, 0.86);
+    vars['--page-tint-2'] = mixHex(raw, white, 0.94);
+    vars['--theme-card'] = rgba(cardTone, 0.82);
+    vars['--theme-cover'] = cover;
+    vars['--app-icon-bg'] = '#ffffff';
+    vars['--app-icon-fg'] = raw;
+    vars['--drop-rgb'] = `${hexToRgb(drop).r}, ${hexToRgb(drop).g}, ${hexToRgb(drop).b}`;
+    vars['--home-fg'] = mixHex(raw, white, 0.92);
+    vars['--shadow'] = `0 24px 60px -32px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, .34), 0 2px 6px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, .04)`;
+  }
+
+  vars['--accent-rgb'] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+  Object.entries(vars).forEach(([name, value]) => root.style.setProperty(name, value));
+  syncThemeButtons();
+}
+
 function applyTheme(theme) {
   const next = theme === 'dark' ? 'dark' : 'light';
   document.documentElement.dataset.theme = next;
   try { localStorage.setItem(THEME_KEY, next); } catch (err) {}
+  applyGlobalAccent();
   syncThemeButtons();
 }
 function syncThemeButtons() {
@@ -6371,7 +6788,10 @@ function syncThemeButtons() {
     btn.title = dark ? '切换到浅色' : '切换到深色';
   });
   const meta = $('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', dark ? '#0d1420' : '#eaf1fa');
+  if (meta) {
+    const themedBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    meta.setAttribute('content', themedBg || (dark ? '#0d1420' : '#eaf1fa'));
+  }
   const sw = $('#setTheme');
   if (sw) sw.checked = dark;
 }
@@ -6610,16 +7030,16 @@ function renderHomeIcons() {
     btn.setAttribute('aria-label', app.name);
 
     const art = document.createElement('span');
-    art.className = 'app-art tint-' + app.tint;
-    const img = state.appIcons[app.id];
-    if (img) {
-      const el = document.createElement('img');
-      el.src = img;
-      el.alt = '';
-      art.append(el);
+    art.className = 'app-art';
+    const customIcon = state.appIcons[app.id];
+    if (customIcon) {
+      const img = document.createElement('img');
+      img.src = customIcon;
+      img.alt = '';
+      art.append(img);
       art.classList.add('has-img');
     } else {
-      art.textContent = app.emoji;
+      art.innerHTML = APP_GLYPHS[app.id] || APP_GLYPHS.chat;
     }
 
     const name = document.createElement('span');
@@ -9487,6 +9907,9 @@ function clearCallTimers() {
 function showCallOverlay(status, hint, options = {}) {
   if (!callOverlay) return;
   closeFnPanel();
+  callState.minimized = false;
+  hideCallMini();
+  if (callMinimizeBtn) callMinimizeBtn.hidden = true;
   if (callAvatar) paintAvatar(callAvatar, 'other');
   if (callNameEl) callNameEl.textContent = state.other.name || 'TA';
   if (callStatusEl) callStatusEl.textContent = status;
@@ -9506,10 +9929,118 @@ function hideCallOverlay() {
   callOverlay.setAttribute('aria-hidden', 'true');
 }
 
+function showCallMini() {
+  if (!callMini) return;
+  if (callMiniAvatar) paintAvatar(callMiniAvatar, 'other');
+  if (callMiniName) callMiniName.textContent = state.other.name || 'TA';
+  updateCallTimer();
+  callMini.classList.add('open');
+  callMini.setAttribute('aria-hidden', 'false');
+  window.requestAnimationFrame(clampCallMini);
+}
+
+function hideCallMini() {
+  if (!callMini) return;
+  callMini.classList.remove('open');
+  callMini.classList.remove('dragging');
+  callMini.setAttribute('aria-hidden', 'true');
+}
+
+function minimizeCall() {
+  if (callState.phase !== 'connected' || callState.minimized) return;
+  callState.minimized = true;
+  hideCallOverlay();
+  showCallMini();
+}
+
+function restoreCallOverlay() {
+  if (callState.phase !== 'connected' || !callOverlay) return;
+  callState.minimized = false;
+  hideCallMini();
+  if (callMinimizeBtn) callMinimizeBtn.hidden = false;
+  callOverlay.classList.add('open');
+  callOverlay.setAttribute('aria-hidden', 'false');
+}
+
 function updateCallTimer() {
-  if (!callTimerEl) return;
   const seconds = Math.floor((Date.now() - callState.startedAt) / 1000);
-  callTimerEl.textContent = fmtDuration(seconds);
+  const time = fmtDuration(seconds);
+  if (callTimerEl) callTimerEl.textContent = time;
+  if (callMiniStatus) callMiniStatus.textContent = `通话中 · ${time}`;
+}
+
+let callMiniDrag = null;
+let callMiniDragEndedAt = 0;
+
+function clampCallMini() {
+  if (!callMini || !phoneEl || !callMini.classList.contains('open')) return;
+  const parent = phoneEl.getBoundingClientRect();
+  const rect = callMini.getBoundingClientRect();
+  const maxLeft = Math.max(8, parent.width - rect.width - 8);
+  const maxTop = Math.max(8, parent.height - rect.height - 8);
+  const left = clamp(rect.left - parent.left, 8, maxLeft);
+  const top = clamp(rect.top - parent.top, 8, maxTop);
+  callMini.style.left = left + 'px';
+  callMini.style.top = top + 'px';
+  callMini.style.right = 'auto';
+  callMini.style.bottom = 'auto';
+}
+
+function beginCallMiniDrag(event) {
+  if (!callMini || !callMini.classList.contains('open')) return;
+  if (event.target.closest('#callMiniHangup')) return;
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  const parent = phoneEl.getBoundingClientRect();
+  const rect = callMini.getBoundingClientRect();
+  callMiniDrag = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    left: rect.left - parent.left,
+    top: rect.top - parent.top,
+    moved: false
+  };
+  callMini.style.left = callMiniDrag.left + 'px';
+  callMini.style.top = callMiniDrag.top + 'px';
+  callMini.style.right = 'auto';
+  callMini.style.bottom = 'auto';
+  callMini.classList.add('dragging');
+  try { callMini.setPointerCapture(event.pointerId); } catch (err) {}
+  event.preventDefault();
+}
+
+function moveCallMiniDrag(event) {
+  if (!callMiniDrag || event.pointerId !== callMiniDrag.pointerId) return;
+  const dx = event.clientX - callMiniDrag.startX;
+  const dy = event.clientY - callMiniDrag.startY;
+  if (Math.abs(dx) > 3 || Math.abs(dy) > 3) callMiniDrag.moved = true;
+  const parent = phoneEl.getBoundingClientRect();
+  const maxLeft = Math.max(8, parent.width - callMini.offsetWidth - 8);
+  const maxTop = Math.max(8, parent.height - callMini.offsetHeight - 8);
+  callMini.style.left = clamp(callMiniDrag.left + dx, 8, maxLeft) + 'px';
+  callMini.style.top = clamp(callMiniDrag.top + dy, 8, maxTop) + 'px';
+  event.preventDefault();
+}
+
+function endCallMiniDrag(event) {
+  if (!callMiniDrag || event.pointerId !== callMiniDrag.pointerId) return;
+  const moved = callMiniDrag.moved;
+  const pointerId = callMiniDrag.pointerId;
+  callMiniDrag = null;
+  callMini.classList.remove('dragging');
+  try { callMini.releasePointerCapture(pointerId); } catch (err) {}
+  if (moved) {
+    callMiniDragEndedAt = Date.now();
+    return;
+  }
+  restoreCallOverlay();
+}
+
+function cancelCallMiniDrag(event) {
+  if (!callMiniDrag || (event && event.pointerId !== callMiniDrag.pointerId)) return;
+  callMiniDrag = null;
+  callMini.classList.remove('dragging');
+  callMiniDragEndedAt = Date.now();
 }
 
 function startCallTimer() {
@@ -9525,6 +10056,7 @@ function connectCall() {
   if (callStatusEl) callStatusEl.textContent = callState.direction === 'in' ? '通话中' : '已接通';
   if (callHintEl) callHintEl.textContent = '点红色按钮挂断';
   if (callTimerEl) callTimerEl.hidden = false;
+  if (callMinimizeBtn) callMinimizeBtn.hidden = false;
   setCallButtons({ hangup: true });
   startCallTimer();
   playSound('call');
@@ -9557,6 +10089,9 @@ function endCall(reason) {
   const duration = wasConnected ? Math.max(1, Math.round((Date.now() - callState.startedAt) / 1000)) : 0;
   clearCallTimers();
   hideCallOverlay();
+  hideCallMini();
+  if (callMinimizeBtn) callMinimizeBtn.hidden = true;
+  callState.minimized = false;
   callState.phase = 'idle';
 
   if (reason === 'ended' && wasConnected) {
@@ -10249,6 +10784,30 @@ function fillAppearance() {
       swatches.append(btn);
     });
   }
+  const accent = normalizeAccent(state.accentColor);
+  const picker = $('#accentPicker');
+  if (picker) picker.value = accent;
+  const accentState = $('#accentState');
+  if (accentState) {
+    const preset = ACCENT_PRESETS.find((item) => item.value.toLowerCase() === accent);
+    accentState.textContent = preset ? preset.name : accent.toUpperCase();
+  }
+  const accentReset = $('#accentReset');
+  if (accentReset) accentReset.disabled = accent === DEFAULT_ACCENT;
+  const accentSwatches = $('#accentSwatches');
+  if (accentSwatches) {
+    accentSwatches.innerHTML = '';
+    ACCENT_PRESETS.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'swatch' + (item.value.toLowerCase() === accent ? ' on' : '');
+      btn.style.setProperty('--sw', item.value);
+      btn.dataset.accent = item.value;
+      btn.title = item.name;
+      btn.setAttribute('aria-label', item.name);
+      accentSwatches.append(btn);
+    });
+  }
   $$('#dropSeg [data-drop]').forEach((btn) => {
     btn.classList.toggle('on', btn.dataset.drop === (state.dropStyle === 'star' ? 'star' : 'drop'));
   });
@@ -10648,6 +11207,14 @@ document.addEventListener('click', (event) => {
   if (wallBtn) {
     state.wallColor = wallBtn.dataset.wallcolor;
     applyWallpaper();
+    fillAppearance();
+    save();
+    return;
+  }
+  const accentBtn = event.target.closest('[data-accent]');
+  if (accentBtn) {
+    state.accentColor = normalizeAccent(accentBtn.dataset.accent);
+    applyGlobalAccent();
     fillAppearance();
     save();
     return;
@@ -11140,6 +11707,27 @@ if (themeSwitch) {
   });
 }
 
+const accentPicker = $('#accentPicker');
+if (accentPicker) {
+  accentPicker.addEventListener('input', () => {
+    state.accentColor = normalizeAccent(accentPicker.value);
+    applyGlobalAccent();
+    fillAppearance();
+    save();
+  });
+}
+
+const accentReset = $('#accentReset');
+if (accentReset) {
+  accentReset.addEventListener('click', () => {
+    state.accentColor = DEFAULT_ACCENT;
+    applyGlobalAccent();
+    fillAppearance();
+    save();
+    toast('已恢复默认全局色调');
+  });
+}
+
 const soundSwitch = $('#setSoundOn');
 if (soundSwitch) {
   soundSwitch.addEventListener('change', (event) => {
@@ -11275,6 +11863,35 @@ if (patManage) {
 if (callAcceptBtn) callAcceptBtn.addEventListener('click', acceptCall);
 if (callDeclineBtn) callDeclineBtn.addEventListener('click', declineIncoming);
 if (callHangupBtn) callHangupBtn.addEventListener('click', hangUpCall);
+
+if (callMinimizeBtn) callMinimizeBtn.addEventListener('click', minimizeCall);
+if (callMiniHangup) {
+  callMiniHangup.addEventListener('click', (event) => {
+    event.stopPropagation();
+    hangUpCall();
+  });
+}
+if (callMiniReturn) {
+  callMiniReturn.addEventListener('click', () => {
+    if (Date.now() - callMiniDragEndedAt < 350) return;
+    restoreCallOverlay();
+  });
+  callMiniReturn.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      restoreCallOverlay();
+    }
+  });
+}
+if (callMini) {
+  callMini.addEventListener('pointerdown', beginCallMiniDrag);
+  callMini.addEventListener('pointermove', moveCallMiniDrag);
+  callMini.addEventListener('pointerup', endCallMiniDrag);
+  callMini.addEventListener('pointercancel', cancelCallMiniDrag);
+}
+window.addEventListener('resize', () => {
+  if (callState.minimized) clampCallMini();
+});
 
 /* ---------------- 纪念日 ---------------- */
 const annivSave = $('#annivSave');
