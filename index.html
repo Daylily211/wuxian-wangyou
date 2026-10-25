@@ -27,6 +27,16 @@
     --shadow: 0 24px 60px -32px rgba(30, 62, 112, .34), 0 2px 6px rgba(30, 62, 112, .04);
     --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
+  html[data-font="song"] {
+    --font: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+  }
+  html[data-font="song"] body {
+    font-weight: 300;
+    letter-spacing: .012em;
+  }
+  html[data-font="round"] {
+    --font: "Yuanti SC", "YouYuan", "Hiragino Maru Gothic ProN", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
 
   html[data-theme="dark"] {
     --bg: #0d1420;
@@ -1906,10 +1916,10 @@
     justify-content: space-around;
     gap: 2px;
     padding: 8px 10px calc(9px + env(safe-area-inset-bottom));
-    background: rgba(13, 30, 52, .42);
-    border-top: 1px solid rgba(255, 255, 255, .16);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    background: #6f92be;
+    border-top: 1px solid #5f82ad;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
   .tab-btn {
     flex: 1;
@@ -1921,7 +1931,7 @@
     border: 0;
     border-radius: 13px;
     background: none;
-    color: rgba(238, 246, 255, .62);
+    color: rgba(245, 250, 255, .86);
     font: inherit;
     font-size: 9.5px;
     letter-spacing: .04em;
@@ -1935,7 +1945,7 @@
     filter: grayscale(.35);
     transition: transform .18s, filter .18s;
   }
-  .tab-btn.is-on { color: #fff; background: rgba(255, 255, 255, .12); }
+  .tab-btn.is-on { color: #fff; background: rgba(255, 255, 255, .17); }
   .tab-btn.is-on .tb-ico { filter: none; transform: translateY(-1px); }
   .tab-btn:active .tb-ico { transform: scale(.92); }
 
@@ -3226,11 +3236,13 @@
     z-index: 140;
     display: flex;
     align-items: center;
-    gap: 6px;
-    width: min(204px, calc(100% - 32px));
-    padding: 6px 7px;
+    justify-content: flex-start;
+    gap: 3px;
+    width: 144px;
+    min-height: 66px;
+    padding: 8px 6px 8px 16px;
     border: 1px solid rgba(255, 255, 255, .18);
-    border-radius: 17px;
+    border-radius: 999px;
     background: linear-gradient(145deg, rgba(27, 48, 76, .96), rgba(11, 22, 38, .97));
     color: #fff;
     box-shadow: 0 18px 36px -18px rgba(0, 0, 0, .75), inset 0 1px 0 rgba(255, 255, 255, .12);
@@ -3258,10 +3270,13 @@
   }
   .call-mini-return {
     flex: 1;
+    width: auto;
     min-width: 0;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 7px;
     padding: 0;
     border: 0;
     background: none;
@@ -3271,9 +3286,9 @@
     cursor: inherit;
   }
   .call-mini-return .avatar {
-    width: 31px;
-    height: 31px;
-    font-size: 15px;
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
     flex: 0 0 auto;
     border: 1.5px solid rgba(255, 255, 255, .55);
     background: rgba(255, 255, 255, .16);
@@ -3283,9 +3298,11 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 2px;
   }
   .call-mini-info b {
+    max-width: 55px;
     font-size: 11.5px;
     font-weight: 600;
     line-height: 1.25;
@@ -3294,27 +3311,30 @@
     white-space: nowrap;
   }
   .call-mini-info span {
-    font-size: 9px;
+    max-width: 55px;
+    font-size: 9.5px;
     line-height: 1.3;
     color: rgba(225, 240, 255, .62);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .call-mini-hangup {
-    width: 27px;
-    height: 27px;
+    width: 22px;
+    height: 22px;
     flex: 0 0 auto;
     padding: 0;
-    border: 0;
+    border: 1.5px solid rgba(255, 255, 255, .85);
     border-radius: 50%;
     display: grid;
     place-items: center;
     background: linear-gradient(160deg, #f4756f, #d13c37);
     color: #fff;
-    font-size: 11px;
+    font-size: 9px;
     line-height: 1;
     cursor: pointer;
-    box-shadow: 0 8px 16px -10px rgba(0, 0, 0, .8);
+    box-shadow: 0 6px 12px -8px rgba(0, 0, 0, .8);
     transition: transform .14s, filter .14s;
   }
   .call-mini-hangup:hover { filter: brightness(1.06); }
@@ -4664,6 +4684,318 @@
   .menu-row:active { background: var(--chip); }
   .menu-row .mr-sub { color: var(--muted); }
 
+  /* 聊天扩展：图片 / 语音 / emoji / 表情包 */
+  .chat-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 7px;
+  }
+  .chat-tool {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color .15s, border-color .15s, background .15s, transform .15s;
+  }
+  .chat-tool:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--card-hover);
+  }
+  .chat-tool:active { transform: scale(.92); }
+  .chat-tool svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .chat-emoji-preview {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    margin-left: 2px;
+    border: 1px solid var(--accent);
+    border-radius: 9px;
+    background: var(--surface-solid);
+    display: grid;
+    place-items: center;
+  }
+  .chat-emoji-preview img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 6px;
+    display: block;
+  }
+  .chat-emoji-preview button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    border: 1px solid var(--surface-solid);
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 9px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+  .voice-recorder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+  }
+  .voice-rec-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #d9534f;
+    animation: voicePulse 1s ease-in-out infinite;
+  }
+  @keyframes voicePulse {
+    0%, 100% { opacity: .35; transform: scale(.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  .voice-timer {
+    flex: 0 0 auto;
+    font-size: 12px;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .voice-hint {
+    flex: 1;
+    min-width: 0;
+    font-size: 9.5px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .voice-recorder .btn { padding: 5px 9px; font-size: 10.5px; border-radius: 9px; }
+
+  .msg .bubble.image-bubble { padding: 4px; }
+  .msg-image {
+    display: block;
+    width: min(220px, 62vw);
+    max-height: 270px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  .msg .bubble.sticker-bubble {
+    padding: 0;
+    border: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .msg-sticker {
+    display: block;
+    width: min(150px, 48vw);
+    max-height: 150px;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+  .msg-emoji {
+    display: block;
+    width: 54px;
+    height: 54px;
+    margin-top: 6px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .3);
+  }
+  .msg.me .msg-emoji { background: rgba(255, 255, 255, .16); }
+  .bubble.voice-bubble { min-width: 128px; padding: 10px 13px; }
+  .voice-body { display: flex; align-items: center; gap: 9px; }
+  .voice-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 18px;
+    flex: 1;
+    color: currentColor;
+  }
+  .voice-wave i {
+    width: 2px;
+    border-radius: 99px;
+    background: currentColor;
+    opacity: .68;
+  }
+  .voice-duration {
+    flex: 0 0 auto;
+    font-size: 10.5px;
+    color: currentColor;
+    opacity: .72;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 表情 / emoji 库 */
+  .overlay-card.media-card { max-width: 410px; }
+  .media-tabs { margin: 2px 0 10px; }
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    max-height: 42vh;
+    overflow-y: auto;
+    padding: 2px;
+    scrollbar-width: thin;
+  }
+  .media-item {
+    aspect-ratio: 1 / 1;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .media-item:hover { border-color: var(--accent); background: var(--card-hover); }
+  .media-item:active { transform: scale(.96); }
+  .media-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .media-empty {
+    grid-column: 1 / -1;
+    padding: 24px 10px;
+    text-align: center;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--muted);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+  }
+  .media-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .media-actions .btn { flex: 1; }
+
+  /* 心晴日记 */
+  .mood-today {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--card);
+  }
+  .mood-today-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .mood-today-head b {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 650;
+  }
+  .mood-choices { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+  .mood-choice {
+    padding: 6px 11px;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    background: var(--chip);
+    color: var(--muted);
+    font: inherit;
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s, transform .15s;
+  }
+  .mood-choice:hover { color: var(--accent); border-color: var(--accent); }
+  .mood-choice.on { background: var(--accent); border-color: transparent; color: #fff; }
+  .mood-choice:active { transform: scale(.96); }
+  .mood-note { min-height: 72px; margin-bottom: 10px; }
+  .mood-save { width: 100%; }
+  .mood-list-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 4px 2px 0;
+  }
+  .mood-list-head h3 { margin: 0; font-size: 12px; }
+  .mood-list-head span { font-size: 9.5px; color: var(--muted); }
+  .mood-list { display: flex; flex-direction: column; gap: 9px; }
+  .mood-entry {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--theme-card, var(--card));
+  }
+  .mood-entry-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+  .mood-entry-head .avatar { width: 30px; height: 30px; font-size: 15px; flex: 0 0 auto; }
+  .mood-entry-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .mood-entry-who b { font-size: 12px; color: var(--ink); font-weight: 650; }
+  .mood-entry-who span { font-size: 9.5px; color: var(--muted); }
+  .mood-entry-mood {
+    flex: 0 0 auto;
+    padding: 3px 9px;
+    border-radius: 99px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .mood-entry-note {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .mood-entry-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 9px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+  }
+  .mood-card-line {
+    padding: 6px 9px;
+    border-radius: 9px;
+    background: var(--chip);
+    font-size: 10.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    word-break: break-word;
+  }
+  .mood-entry-time { margin-top: 7px; font-size: 9.5px; color: var(--muted); }
+  .mood-library-card textarea { min-height: 132px; }
+
   /* 全局色调：聊天页底色也跟随强调色 */
   .chat {
     background:
@@ -4894,6 +5226,28 @@
           </div>
           <button class="quote-x" id="quoteCancel" type="button" aria-label="取消引用">✕</button>
         </div>
+        <div class="voice-recorder" id="voiceRecorder" hidden>
+          <span class="voice-rec-dot" aria-hidden="true"></span>
+          <span class="voice-timer" id="voiceTimer">00:00</span>
+          <span class="voice-hint">模拟语音 · 不录制真实声音</span>
+          <button class="btn primary small" id="voiceSendBtn" type="button">发送</button>
+          <button class="btn ghost small" id="voiceCancelBtn" type="button">取消</button>
+        </div>
+        <div class="chat-tools">
+          <button class="chat-tool" id="chatImageBtn" type="button" title="发送图片" aria-label="发送图片">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg>
+          </button>
+          <button class="chat-tool" id="chatVoiceBtn" type="button" title="发送语音" aria-label="发送语音">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>
+          </button>
+          <button class="chat-tool" id="chatEmojiBtn" type="button" title="表情与 emoji" aria-label="表情与 emoji">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14a4.5 4.5 0 0 0 8 0"/><path d="M9 9h.01M15 9h.01"/></svg>
+          </button>
+          <span class="chat-emoji-preview" id="chatEmojiPreview" hidden>
+            <img id="chatEmojiPreviewImg" alt="">
+            <button id="chatEmojiClear" type="button" aria-label="取消这个 emoji">✕</button>
+          </span>
+        </div>
         <div class="composer-box">
           <textarea id="input" rows="1" maxlength="500" placeholder="说点什么…" aria-label="输入消息"></textarea>
           <button class="plus-btn" id="plusBtn" type="button" aria-label="更多功能" aria-expanded="false" title="更多功能">
@@ -5101,6 +5455,16 @@
           </div>
 
           <div class="settings-group">
+            <h3>全局字体</h3>
+            <div class="set-seg" id="fontSeg" role="group" aria-label="全局字体">
+              <button type="button" data-font-choice="sans">默认无衬线</button>
+              <button type="button" data-font-choice="song">瘦宋体</button>
+              <button type="button" data-font-choice="round">圆体</button>
+            </div>
+            <p class="hint">会同步应用到正文、按钮、标题和聊天界面。</p>
+          </div>
+
+          <div class="settings-group">
             <h3>主屏幕壁纸</h3>
             <div class="wall-row">
               <div class="wall-preview" id="wallPreview" aria-hidden="true"></div>
@@ -5147,6 +5511,14 @@
               <small>发送和收到消息时播放提示音</small>
             </span>
             <input type="checkbox" id="setSoundOn">
+          </label>
+
+          <label class="switch">
+            <span>
+              <b>后台保活</b>
+              <small>持续播放一段无声音频，尽量让后台定时器和消息继续运行</small>
+            </span>
+            <input type="checkbox" id="setKeepAlive">
           </label>
 
           <div class="sound-card">
@@ -5224,6 +5596,17 @@
               </span>
               <input type="checkbox" id="setTyping">
             </label>
+            <label class="switch">
+              <span>
+                <b>主动发消息</b>
+                <small>开启后 TA 会隔一段时间主动发来一条字卡消息</small>
+              </span>
+              <input type="checkbox" id="setAutoMessage">
+            </label>
+            <div class="field">
+              <label for="setAutoMessageInterval">主动发消息间隔 <span id="autoMessageIntervalVal">1 分 30 秒</span></label>
+              <input type="range" id="setAutoMessageInterval" min="10" max="600" step="10" value="90">
+            </div>
             <label class="switch">
               <span>
                 <b>随机来电</b>
@@ -5742,6 +6125,40 @@
       </div>
     </section>
 
+    <section class="page app-page" data-page="mood" aria-label="心晴日记">
+      <div class="sheet-inner">
+        <div class="sheet-head">
+          <button class="back-btn" type="button" data-back aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div class="head-text">
+            <h2>心晴日记</h2>
+            <p id="moodSub">今天的心情，和 TA 一起记下来</p>
+          </div>
+          <button class="icon-btn" id="moodLibraryBtn" type="button" title="心情库" aria-label="心情库">📚</button>
+        </div>
+        <div class="sheet-body">
+          <div class="mood-today">
+            <div class="mood-today-head">
+              <b id="moodTodayDate">今天</b>
+              <span>每天都可以记一笔，双方都能看见</span>
+            </div>
+            <div class="mood-choices" id="moodChoices"></div>
+            <textarea class="input mood-note" id="moodNote" rows="3" maxlength="200" placeholder="今天发生了什么？写一句留给这一天…"></textarea>
+            <button class="btn primary mood-save" id="moodSaveBtn" type="button">记下今天的心情</button>
+          </div>
+          <div class="mood-list-head">
+            <h3>心情日记</h3>
+            <span>双方记录 · TA 会附上随机字卡</span>
+          </div>
+          <div class="mood-list" id="moodList"></div>
+        </div>
+        <div class="sheet-foot">
+          <button class="btn" type="button" data-back>关闭</button>
+        </div>
+      </div>
+    </section>
+
     <section class="page app-page" data-page="mail" aria-label="信箱">
       <div class="drawer-inner">
         <div class="drawer-head">
@@ -5795,7 +6212,7 @@
       <span class="avatar" id="callMiniAvatar"></span>
       <span class="call-mini-info">
         <b id="callMiniName">TA</b>
-        <span id="callMiniStatus">通话中 · 00:00</span>
+        <span id="callMiniStatus">00:00</span>
       </span>
     </button>
     <button class="call-mini-hangup" id="callMiniHangup" type="button" aria-label="挂断">✕</button>
@@ -5911,10 +6328,42 @@
     </div>
   </div>
 
+  <div class="overlay-sheet" id="mediaSheet" aria-hidden="true">
+    <button class="overlay-scrim" type="button" data-media-close aria-label="关闭"></button>
+    <div class="overlay-card media-card" role="dialog" aria-modal="true" aria-labelledby="mediaSheetTitle">
+      <h3 id="mediaSheetTitle">表情与 emoji</h3>
+      <div class="stats-tabs media-tabs" id="mediaTabs">
+        <button class="stat-tab is-on" type="button" data-media-tab="stickers">表情包</button>
+        <button class="stat-tab" type="button" data-media-tab="emojis">emoji 库</button>
+      </div>
+      <div class="media-grid" id="mediaGrid"></div>
+      <div class="media-actions">
+        <button class="btn primary small" id="mediaImportBtn" type="button">导入图片</button>
+        <button class="btn ghost small" id="mediaClearBtn" type="button">清空当前库</button>
+      </div>
+      <p class="overlay-sub media-hint">表情包会作为图片消息直接发送；emoji 会附在下一条文字或字卡消息里。</p>
+      <button class="btn ghost" type="button" data-media-close>取消</button>
+    </div>
+  </div>
+
+  <div class="overlay-sheet" id="moodLibrarySheet" aria-hidden="true">
+    <button class="overlay-scrim" type="button" data-mood-lib-close aria-label="关闭"></button>
+    <div class="overlay-card mood-library-card" role="dialog" aria-modal="true" aria-labelledby="moodLibraryTitle">
+      <h3 id="moodLibraryTitle">心情库</h3>
+      <p class="overlay-sub">每行一个心情，可以带 emoji，例如「开心 😊」。保存后用来记录每天的心情。</p>
+      <textarea class="input" id="moodLibraryInput" rows="6" maxlength="600" placeholder="开心 😊&#10;平静 🌿&#10;想你 💭"></textarea>
+      <button class="btn primary" id="moodLibrarySave" type="button">保存心情库</button>
+      <button class="btn ghost" id="moodLibraryReset" type="button">恢复默认心情</button>
+      <button class="btn ghost" type="button" data-mood-lib-close>取消</button>
+    </div>
+  </div>
+
   <audio id="musicAudio" preload="none" aria-hidden="true"></audio>
 </div>
 
 <input type="file" id="iconFile" accept="image/*" hidden>
+<input type="file" id="chatImageFile" accept="image/*" hidden>
+<input type="file" id="chatMediaFile" accept="image/*" multiple hidden>
 <input type="file" id="wallFile" accept="image/*" hidden>
 <input type="file" id="soundFile" accept="audio/*" hidden>
 <input type="file" id="musicCoverFile" accept="image/*" hidden>
@@ -5990,6 +6439,7 @@ const APPS = [
   { id: 'survey', name: '问卷', emoji: '📋', tint: 'sun' },
   { id: 'gift', name: '礼物商店', emoji: '🎁', tint: 'rose' },
   { id: 'stats', name: '字卡统计', emoji: '📊', tint: 'teal' },
+  { id: 'mood', name: '心晴日记', emoji: '🌤', tint: 'teal' },
   { id: 'mail', name: '信箱', emoji: '💌', tint: 'coral' },
   { id: 'favorites', name: '收藏', emoji: '⭐', tint: 'amber' },
   { id: 'anniversary', name: '纪念日', emoji: '🎂', tint: 'coral' },
@@ -6006,6 +6456,7 @@ const APP_GLYPHS = {
   survey: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8 9h8M8 13h8M8 17h5"/></svg>',
   gift: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18v4H3zM12 9v11M12 9C9 9 7 8 7 6a2 2 0 0 1 4-1c.6 1 .6 2 1 4Zm0 0c3 0 5-1 5-3a2 2 0 0 0-4-1c-.6 1-.6 2-1 4Z"/></svg>',
   stats: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>',
+  mood: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
   mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>',
   favorites: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>',
   anniversary: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M5 21v-7h14v7M8 14v-3M12 14V9M16 14v-3"/><path d="M8 8.5c0-.8 1-1.5 1-2.5M12 6c0-.8 1-1.5 1-2.5M16 8.5c0-.8 1-1.5 1-2.5"/></svg>',
@@ -6222,6 +6673,8 @@ function buildDropsPattern() {
   document.documentElement.style.setProperty('--drops', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
 }
 
+const DEFAULT_MOODS = ['开心 😊', '平静 🌿', '有点累 😮‍💨', '想你 💭', '难过 🌧️', '兴奋 ✨'];
+
 const DEFAULT_GIFTS = [
   ['一杯热可可', 18, '☕'],
   ['一小束向日葵', 36, '🌻'],
@@ -6255,6 +6708,7 @@ function freshState() {
     wallpaper: '',
     wallColor: WALL_COLORS[0].value,
     accentColor: '#4a7fd4',
+    fontFamily: 'sans',
     dropStyle: 'drop',
     sounds: { send: '', receive: '' },
     anniversary: { start: '', items: [] },
@@ -6266,11 +6720,15 @@ function freshState() {
     tarotLogs: [],
     surveys: [],
     surveyHistorySeenAt: 0,
+    stickers: [],
+    emojis: [],
+    moods: DEFAULT_MOODS.slice(),
+    moodEntries: [],
     giftItems: DEFAULT_GIFTS.map(([name, price, emoji]) => ({ id: uid(), name, price, emoji })),
     statusPool: [],
     letters: [],
     messages: [],
-    settings: { delayMin: 800, delayMax: 2200, noRepeat: true, typing: true, perReply: 1, mergeCards: true, soundOn: true, calls: true, transfers: true, gifts: true, letters: true, callRate: 'low', transferRate: 'low', giftRate: 'low', letterRate: 'mid', momentChance: 55 }
+    settings: { delayMin: 800, delayMax: 2200, noRepeat: true, typing: true, perReply: 1, mergeCards: true, soundOn: true, calls: true, transfers: true, gifts: true, letters: true, callRate: 'low', transferRate: 'low', giftRate: 'low', letterRate: 'mid', momentChance: 55, keepAlive: false, autoMessage: false, autoMessageInterval: 90 }
   };
 }
 
@@ -6299,6 +6757,7 @@ function loadState() {
     };
     next.wallColor = WALL_COLORS.some((c) => c.value === data.wallColor) ? data.wallColor : base.wallColor;
     next.accentColor = /^#[0-9a-f]{6}$/i.test(String(data.accentColor || '')) ? String(data.accentColor).toLowerCase() : base.accentColor;
+    next.fontFamily = ['sans', 'song', 'round'].includes(data.fontFamily) ? data.fontFamily : 'sans';
     next.loveNote = typeof data.loveNote === 'string' ? data.loveNote.slice(0, 200) : base.loveNote;
     const storedMusic = data.music && typeof data.music === 'object' ? data.music : {};
     next.music = {
@@ -6375,7 +6834,7 @@ function loadState() {
     next.messages = next.messages
       .filter((m) => m && (m.from === 'me' || m.from === 'other') && (typeof m.text === 'string' || m.kind === 'pat'))
       .map((m) => {
-        const kinds = ['pat', 'decision', 'call', 'transfer', 'receipt', 'gift', 'survey'];
+        const kinds = ['pat', 'decision', 'call', 'transfer', 'receipt', 'gift', 'survey', 'voice', 'image', 'sticker'];
         let kind = kinds.includes(m.kind) ? m.kind : 'text';
         if (kind === 'decision' && m.from !== 'other') kind = 'text';
         if (kind === 'survey' && m.from !== 'other') kind = 'text';
@@ -6385,6 +6844,8 @@ function loadState() {
         const isReceipt = kind === 'receipt';
         const isGift = kind === 'gift';
         const isSurvey = kind === 'survey';
+        const isVoice = kind === 'voice';
+        const isMedia = kind === 'image' || kind === 'sticker';
         const statusList = ['busy', 'declined', 'ended', 'missed', 'rejected', 'cancelled'];
         const reactionList = ['question', 'heart', 'ok'];
         return {
@@ -6400,7 +6861,9 @@ function loadState() {
           fav: m.fav === true,
           time: Number(m.time) || Date.now(),
           status: isCall && statusList.includes(m.status) ? m.status : '',
-          duration: isCall ? clamp(Number(m.duration) || 0, 0, 86400) : 0,
+          duration: isCall ? clamp(Number(m.duration) || 0, 0, 86400) : (isVoice ? clamp(Number(m.duration) || 1, 1, 600) : 0),
+          image: isMedia && typeof m.image === 'string' && m.image.startsWith('data:image/') ? m.image : '',
+          emoji: typeof m.emoji === 'string' && m.emoji.startsWith('data:image/') ? m.emoji : '',
           amount: (isTransfer || isReceipt) ? clamp(Number(m.amount) || 0, 0, 100000) : 0,
           received: (isTransfer || isReceipt) ? m.received === true || isReceipt : false,
           read: m.from === 'me' ? m.read !== false : false,
@@ -6422,6 +6885,7 @@ function loadState() {
       })
       .filter((m) => m.kind !== 'pat' || m.text)
       .filter((m) => m.kind !== 'call' || m.text)
+      .filter((m) => (m.kind !== 'image' && m.kind !== 'sticker') || m.image)
       .slice(-300);
     let delayMin = Number(next.settings.delayMin);
     let delayMax = Number(next.settings.delayMax);
@@ -6449,6 +6913,9 @@ function loadState() {
     next.settings.transfers = next.settings.transfers !== false;
     next.settings.gifts = next.settings.gifts !== false;
     next.settings.letters = next.settings.letters !== false;
+    next.settings.keepAlive = next.settings.keepAlive === true;
+    next.settings.autoMessage = next.settings.autoMessage === true;
+    next.settings.autoMessageInterval = clamp(Number(next.settings.autoMessageInterval) || 90, 10, 600);
     next.settings.callRate = ['low', 'mid', 'high'].includes(next.settings.callRate) ? next.settings.callRate : 'low';
     next.settings.transferRate = ['low', 'mid', 'high'].includes(next.settings.transferRate) ? next.settings.transferRate : 'low';
     next.settings.giftRate = ['low', 'mid', 'high'].includes(next.settings.giftRate) ? next.settings.giftRate : 'low';
@@ -6508,6 +6975,36 @@ function loadState() {
       : [];
     next.surveyHistorySeenAt = Number(data.surveyHistorySeenAt) || 0;
 
+    next.stickers = Array.isArray(data.stickers)
+      ? data.stickers.filter((src) => typeof src === 'string' && src.startsWith('data:image/')).slice(-30)
+      : [];
+    next.emojis = Array.isArray(data.emojis)
+      ? data.emojis.filter((src) => typeof src === 'string' && src.startsWith('data:image/')).slice(-40)
+      : [];
+    next.moods = Array.isArray(data.moods)
+      ? data.moods
+        .filter((m) => typeof m === 'string' && m.trim())
+        .map((m) => m.trim().slice(0, 20))
+        .slice(-30)
+      : base.moods;
+    if (!next.moods.length) next.moods = base.moods;
+    next.moodEntries = Array.isArray(data.moodEntries)
+      ? data.moodEntries
+        .filter((entry) => entry && (entry.from === 'me' || entry.from === 'other') && typeof entry.mood === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(String(entry.date || '')))
+        .map((entry) => ({
+          id: typeof entry.id === 'string' && entry.id ? entry.id : uid(),
+          from: entry.from,
+          date: entry.date,
+          mood: entry.mood.trim().slice(0, 20),
+          note: typeof entry.note === 'string' ? entry.note.slice(0, 200) : '',
+          cards: Array.isArray(entry.cards)
+            ? entry.cards.filter((c) => typeof c === 'string' && c.trim()).map((c) => c.trim().slice(0, 500)).slice(0, 5)
+            : [],
+          time: Number(entry.time) || Date.now()
+        }))
+        .slice(-240)
+      : [];
+
     next.giftItems = Array.isArray(data.giftItems)
       ? data.giftItems
         .filter((g) => g && typeof g.name === 'string' && g.name.trim())
@@ -6552,6 +7049,11 @@ let editingCardId = null;
 let cardQuery = '';
 let cardTagFilter = 'all';
 let quoteDraft = null;
+let pendingEmoji = '';
+let voiceDraft = null;
+let mediaTab = 'stickers';
+let mediaImportTarget = 'stickers';
+let moodSelected = '';
 const timers = new Set();
 
 const messagesEl = $('#messages');
@@ -6655,6 +7157,7 @@ const callState = {
   auto: null,
   next: null,
   transfer: null,
+  autoMsg: null,
   moment: null,
   momentReply: null,
   status: null,
@@ -6774,6 +7277,11 @@ function applyGlobalAccent() {
   syncThemeButtons();
 }
 
+function applyGlobalFont() {
+  const font = ['sans', 'song', 'round'].includes(state.fontFamily) ? state.fontFamily : 'sans';
+  document.documentElement.dataset.font = font;
+}
+
 function applyTheme(theme) {
   const next = theme === 'dark' ? 'dark' : 'light';
   document.documentElement.dataset.theme = next;
@@ -6818,6 +7326,73 @@ function applyWallpaper() {
 function applyDropStyle() {
   if (phoneEl) phoneEl.dataset.drops = state.dropStyle === 'star' ? 'star' : 'drop';
 }
+
+/* ---------------- 后台保活 ---------------- */
+let keepAliveAudio = null;
+let keepAlivePendingStart = false;
+
+function buildSilentWavUrl() {
+  const sampleRate = 8000;
+  const sampleCount = sampleRate;
+  const buffer = new ArrayBuffer(44 + sampleCount);
+  const view = new DataView(buffer);
+  const writeText = (offset, text) => {
+    for (let i = 0; i < text.length; i += 1) view.setUint8(offset + i, text.charCodeAt(i));
+  };
+  writeText(0, 'RIFF');
+  view.setUint32(4, 36 + sampleCount, true);
+  writeText(8, 'WAVE');
+  writeText(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate, true);
+  view.setUint16(32, 1, true);
+  view.setUint16(34, 8, true);
+  writeText(36, 'data');
+  view.setUint32(40, sampleCount, true);
+  for (let i = 0; i < sampleCount; i += 1) view.setUint8(44 + i, 128);
+  return URL.createObjectURL(new Blob([view], { type: 'audio/wav' }));
+}
+
+function ensureKeepAliveAudio() {
+  if (keepAliveAudio) return keepAliveAudio;
+  keepAliveAudio = new Audio(buildSilentWavUrl());
+  keepAliveAudio.loop = true;
+  keepAliveAudio.volume = 0.01;
+  keepAliveAudio.preload = 'auto';
+  keepAliveAudio.setAttribute('playsinline', '');
+  keepAliveAudio.setAttribute('aria-hidden', 'true');
+  return keepAliveAudio;
+}
+
+function tryStartKeepAlive() {
+  if (!state.settings.keepAlive) return;
+  const audio = ensureKeepAliveAudio();
+  const play = audio.play();
+  if (play && play.then) {
+    play.then(() => { keepAlivePendingStart = false; }).catch(() => {
+      keepAlivePendingStart = true;
+    });
+  }
+}
+
+function applyKeepAlive() {
+  if (state.settings.keepAlive) {
+    tryStartKeepAlive();
+  } else if (keepAliveAudio) {
+    keepAliveAudio.pause();
+    keepAlivePendingStart = false;
+  }
+}
+
+document.addEventListener('pointerdown', () => {
+  if (keepAlivePendingStart && state.settings.keepAlive) tryStartKeepAlive();
+}, { passive: true });
+document.addEventListener('keydown', () => {
+  if (keepAlivePendingStart && state.settings.keepAlive) tryStartKeepAlive();
+});
 
 /* ---------------- 消息音效 ---------------- */
 function ensureAudio() {
@@ -6975,7 +7550,7 @@ function renderChatHead() {
     <div class="avatar">${avatarInner('other')}</div>
     <div class="chat-title">
       <h2>${esc(p.name || 'TA')}</h2>
-      <div class="chat-meta"><i class="dot"></i><span class="chat-status">${esc(status)}</span><span class="chat-sub"> · 字卡自动回复</span></div>
+      <div class="chat-meta"><i class="dot"></i><span class="chat-status">${esc(status)}</span></div>
     </div>
     <div class="chat-actions">
       <button class="icon-btn" type="button" data-theme-toggle title="切换深浅色" aria-label="切换深浅色">🌙</button>
@@ -8371,6 +8946,8 @@ function applyPage(name) {
     renderGiftShop();
   } else if (name === 'stats') {
     renderStatsPage();
+  } else if (name === 'mood') {
+    renderMoodPage();
   } else if (name === 'mail') {
     renderMail();
   }
@@ -8531,6 +9108,10 @@ function messagePreview(msg) {
   if (msg.kind === 'pat') return '👋 ' + (msg.text || '');
   if (msg.kind === 'call') return '📞 ' + (msg.text || callLogText(msg.status, msg.duration));
   if (msg.kind === 'transfer') return `💰 转账 ¥${(Number(msg.amount) || 0).toFixed(2)}`;
+  if (msg.kind === 'voice') return `🎙 语音 ${Math.max(1, Number(msg.duration) || 1)}″`;
+  if (msg.kind === 'image') return '🖼 [图片]';
+  if (msg.kind === 'sticker') return '😀 [表情包]';
+  if (msg.emoji) return (msg.text ? msg.text + ' ' : '') + '😊';
   return msg.text || '';
 }
 
@@ -8608,6 +9189,24 @@ function buildCallBody(msg) {
   strong.textContent = msg.text || callLogText(msg.status, msg.duration);
   label.append(strong);
   wrap.append(ico, label);
+  return wrap;
+}
+
+function buildVoiceBody(msg) {
+  const wrap = document.createElement('div');
+  wrap.className = 'voice-body';
+  const wave = document.createElement('div');
+  wave.className = 'voice-wave';
+  const seed = String(msg.id || '').split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  for (let i = 0; i < 11; i += 1) {
+    const bar = document.createElement('i');
+    bar.style.height = (5 + ((seed + i * 7) % 12)) + 'px';
+    wave.append(bar);
+  }
+  const duration = document.createElement('span');
+  duration.className = 'voice-duration';
+  duration.textContent = `${Math.max(1, Number(msg.duration) || 1)}″`;
+  wrap.append(wave, duration);
   return wrap;
 }
 
@@ -8780,8 +9379,32 @@ function buildMessage(msg) {
   } else if (msg.kind === 'survey') {
     bubble.classList.add('survey-bubble');
     bubble.append(buildSurveyBody(msg));
+  } else if (msg.kind === 'voice') {
+    bubble.classList.add('voice-bubble');
+    bubble.append(buildVoiceBody(msg));
+  } else if (msg.kind === 'image') {
+    bubble.classList.add('image-bubble');
+    const img = document.createElement('img');
+    img.className = 'msg-image';
+    img.src = msg.image;
+    img.alt = '聊天图片';
+    bubble.append(img);
+  } else if (msg.kind === 'sticker') {
+    bubble.classList.add('sticker-bubble');
+    const img = document.createElement('img');
+    img.className = 'msg-sticker';
+    img.src = msg.image;
+    img.alt = '表情包';
+    bubble.append(img);
   } else {
-    bubble.append(document.createTextNode(msg.text));
+    if (msg.text) bubble.append(document.createTextNode(msg.text));
+    if (msg.emoji) {
+      const emoji = document.createElement('img');
+      emoji.className = 'msg-emoji';
+      emoji.src = msg.emoji;
+      emoji.alt = 'emoji';
+      bubble.append(emoji);
+    }
   }
 
   appendMsgTime(body, msg);
@@ -8933,14 +9556,15 @@ function appendMessage(msg) {
   scheduleMessageFeedback(msg);
 }
 
-function pushMessage(from, text, quote) {
-  const textValue = String(text).trim();
-  if (!textValue) return;
+function pushMessage(from, text, quote, emoji) {
+  const textValue = String(text || '').trim();
+  if (!textValue && !emoji) return;
   appendMessage({
     id: uid(),
     from,
     kind: 'text',
     text: textValue.slice(0, 1000),
+    emoji: emoji || '',
     quote: quote || null,
     time: Date.now()
   });
@@ -9112,6 +9736,35 @@ function scheduleReply() {
     });
     if (isPage('cards')) updateCardsSummary();
   }, base);
+}
+
+function fmtAutoInterval(seconds) {
+  const total = clamp(Math.round(Number(seconds) || 90), 10, 600);
+  const minutes = Math.floor(total / 60);
+  const rest = total % 60;
+  if (!minutes) return `${rest} 秒`;
+  return rest ? `${minutes} 分 ${rest} 秒` : `${minutes} 分`;
+}
+
+function scheduleAutoMessage() {
+  if (callState.autoMsg) {
+    window.clearTimeout(callState.autoMsg);
+    callState.autoMsg = null;
+  }
+  if (!state.settings.autoMessage) return;
+  const interval = clamp(Number(state.settings.autoMessageInterval) || 90, 10, 600);
+  const wait = interval * 1000;
+  callState.autoMsg = window.setTimeout(() => {
+    callState.autoMsg = null;
+    if (state.settings.autoMessage && state.cards.length && callState.phase === 'idle') {
+      const picks = pickCards(1);
+      if (picks.length) {
+        pushMessage('other', picks[0].text);
+        if (!isPage('chat') && !document.hidden) toast((state.other.name || 'TA') + ' 主动发来一条消息');
+      }
+    }
+    scheduleAutoMessage();
+  }, wait);
 }
 
 function askDecision(question) {
@@ -9966,7 +10619,7 @@ function updateCallTimer() {
   const seconds = Math.floor((Date.now() - callState.startedAt) / 1000);
   const time = fmtDuration(seconds);
   if (callTimerEl) callTimerEl.textContent = time;
-  if (callMiniStatus) callMiniStatus.textContent = `通话中 · ${time}`;
+  if (callMiniStatus) callMiniStatus.textContent = time;
 }
 
 let callMiniDrag = null;
@@ -10729,6 +11382,16 @@ function fillSettings() {
   $('#setMerge').checked = state.settings.mergeCards;
   $('#setNoRepeat').checked = state.settings.noRepeat;
   $('#setTyping').checked = state.settings.typing;
+  const autoMessage = $('#setAutoMessage');
+  if (autoMessage) autoMessage.checked = state.settings.autoMessage === true;
+  const autoInterval = $('#setAutoMessageInterval');
+  if (autoInterval) {
+    const seconds = clamp(Number(state.settings.autoMessageInterval) || 90, 10, 600);
+    autoInterval.value = String(seconds);
+    const label = $('#autoMessageIntervalVal');
+    if (label) label.textContent = fmtAutoInterval(seconds);
+    updateRangeFill(autoInterval);
+  }
   const calls = $('#setCalls');
   if (calls) calls.checked = state.settings.calls !== false;
   const transfers = $('#setTransfers');
@@ -10808,6 +11471,9 @@ function fillAppearance() {
       accentSwatches.append(btn);
     });
   }
+  $$('#fontSeg [data-font-choice]').forEach((btn) => {
+    btn.classList.toggle('on', btn.dataset.fontChoice === (state.fontFamily || 'sans'));
+  });
   $$('#dropSeg [data-drop]').forEach((btn) => {
     btn.classList.toggle('on', btn.dataset.drop === (state.dropStyle === 'star' ? 'star' : 'drop'));
   });
@@ -10858,6 +11524,8 @@ function fillTarotSettings() {
 function fillSound() {
   const on = $('#setSoundOn');
   if (on) on.checked = state.settings.soundOn !== false;
+  const keepAlive = $('#setKeepAlive');
+  if (keepAlive) keepAlive.checked = state.settings.keepAlive === true;
   const sendState = $('#sendSoundState');
   const receiveState = $('#receiveSoundState');
   if (sendState) sendState.textContent = state.sounds.send ? '自定义音效' : '默认音效';
@@ -11060,20 +11728,329 @@ function openSettings() {
 }
 
 /* ---------------- 发送与页面 ---------------- */
-function sendUserMessage(raw, quote) {
+function sendUserMessage(raw, quote, emoji) {
   const text = String(raw || '').trim();
-  if (!text) return;
-  pushMessage('me', text, quote || quoteDraft);
+  if (!text && !emoji) return;
+  pushMessage('me', text, quote || quoteDraft, emoji || '');
   scheduleReply();
 }
 
 function updateSendState() {
-  sendBtn.disabled = !inputEl.value.trim();
+  sendBtn.disabled = !inputEl.value.trim() && !pendingEmoji;
 }
 
 function autoGrow() {
   inputEl.style.height = 'auto';
   inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+}
+
+/* ---------------- 聊天图片 / 表情 / emoji ---------------- */
+function renderEmojiPreview() {
+  const box = $('#chatEmojiPreview');
+  const img = $('#chatEmojiPreviewImg');
+  if (!box || !img) return;
+  box.hidden = !pendingEmoji;
+  if (pendingEmoji) img.src = pendingEmoji;
+  else img.removeAttribute('src');
+  updateSendState();
+}
+
+function readChatImage(file, maxSide) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type || !file.type.startsWith('image/')) {
+      reject(new Error('请选择图片文件'));
+      return;
+    }
+    if (file.size > 14 * 1024 * 1024) {
+      reject(new Error('图片有点大，换一张小于 14MB 的吧'));
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        let data = canvas.toDataURL('image/webp', 0.82);
+        if (!data.startsWith('data:image/webp')) data = canvas.toDataURL('image/jpeg', 0.84);
+        resolve(data);
+      };
+      img.onerror = () => reject(new Error('这张图片读不出来'));
+      img.src = String(reader.result);
+    };
+    reader.onerror = () => reject(new Error('读取图片失败'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderMediaSheet() {
+  $$('#mediaTabs [data-media-tab]').forEach((btn) => {
+    btn.classList.toggle('is-on', btn.dataset.mediaTab === mediaTab);
+  });
+  const grid = $('#mediaGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const items = mediaTab === 'stickers' ? state.stickers : state.emojis;
+  if (!items.length) {
+    const empty = document.createElement('p');
+    empty.className = 'media-empty';
+    empty.textContent = mediaTab === 'stickers'
+      ? '还没有导入表情包。点下方「导入图片」，选几张图吧。'
+      : '还没有导入 emoji。点下方「导入图片」，emoji 会附在下一条消息里。';
+    grid.append(empty);
+    return;
+  }
+  items.slice().reverse().forEach((src) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'media-item';
+    btn.dataset.mediaSrc = src;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = mediaTab === 'stickers' ? '表情包' : 'emoji';
+    btn.append(img);
+    grid.append(btn);
+  });
+}
+
+function openMediaSheet(tab) {
+  mediaTab = tab === 'emojis' ? 'emojis' : 'stickers';
+  renderMediaSheet();
+  const sheet = $('#mediaSheet');
+  if (!sheet) return;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeMediaSheet() {
+  const sheet = $('#mediaSheet');
+  if (!sheet) return;
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
+}
+
+function sendSticker(src) {
+  if (!src) return;
+  appendMessage({
+    id: uid(),
+    from: 'me',
+    kind: 'sticker',
+    image: src,
+    text: '[表情包]',
+    time: Date.now()
+  });
+  closeMediaSheet();
+  scheduleReply();
+}
+
+function startVoiceDraft() {
+  if (voiceDraft) {
+    const recorder = $('#voiceRecorder');
+    if (recorder) recorder.scrollIntoView({ block: 'nearest' });
+    return;
+  }
+  voiceDraft = { startedAt: Date.now(), timer: null };
+  const recorder = $('#voiceRecorder');
+  if (recorder) recorder.hidden = false;
+  const tick = () => {
+    if (!voiceDraft) return;
+    const seconds = Math.max(0, Math.floor((Date.now() - voiceDraft.startedAt) / 1000));
+    const face = $('#voiceTimer');
+    if (face) face.textContent = fmtDuration(seconds);
+  };
+  tick();
+  voiceDraft.timer = window.setInterval(tick, 300);
+}
+
+function closeVoiceDraft() {
+  if (voiceDraft && voiceDraft.timer) window.clearInterval(voiceDraft.timer);
+  voiceDraft = null;
+  const recorder = $('#voiceRecorder');
+  if (recorder) recorder.hidden = true;
+  const face = $('#voiceTimer');
+  if (face) face.textContent = '00:00';
+}
+
+function sendVoiceDraft() {
+  if (!voiceDraft) return;
+  const duration = Math.max(1, Math.round((Date.now() - voiceDraft.startedAt) / 1000));
+  closeVoiceDraft();
+  appendMessage({
+    id: uid(),
+    from: 'me',
+    kind: 'voice',
+    duration,
+    text: `语音 ${duration}″`,
+    time: Date.now()
+  });
+  scheduleReply();
+}
+
+/* ---------------- 心晴日记 ---------------- */
+function moodDateLabel(date) {
+  const parsed = parseISODate(date);
+  if (!parsed) return date;
+  return parsed.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' });
+}
+
+function renderMoodPage() {
+  const choices = $('#moodChoices');
+  const note = $('#moodNote');
+  const today = isoFromDate(new Date());
+  const todayMine = state.moodEntries.find((entry) => entry.from === 'me' && entry.date === today);
+  if (!moodSelected || !state.moods.includes(moodSelected)) {
+    moodSelected = todayMine && state.moods.includes(todayMine.mood) ? todayMine.mood : (state.moods[0] || '');
+  }
+  const dateEl = $('#moodTodayDate');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+  if (choices) {
+    choices.innerHTML = '';
+    state.moods.forEach((mood) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mood-choice' + (mood === moodSelected ? ' on' : '');
+      btn.dataset.mood = mood;
+      btn.textContent = mood;
+      choices.append(btn);
+    });
+  }
+  if (note) note.value = todayMine ? todayMine.note : '';
+  const list = $('#moodList');
+  if (!list) return;
+  list.innerHTML = '';
+  const entries = state.moodEntries.slice().sort((a, b) => (b.time || 0) - (a.time || 0));
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'list-empty';
+    empty.textContent = '还没有心情记录。记下今天的第一笔吧。';
+    list.append(empty);
+    return;
+  }
+  entries.forEach((entry) => {
+    const card = document.createElement('article');
+    card.className = 'mood-entry';
+    const head = document.createElement('div');
+    head.className = 'mood-entry-head';
+    const avatar = document.createElement('span');
+    avatar.className = 'avatar';
+    paintAvatar(avatar, entry.from);
+    const who = document.createElement('div');
+    who.className = 'mood-entry-who';
+    const name = document.createElement('b');
+    name.textContent = entry.from === 'me' ? (state.me.name || '我') : (state.other.name || 'TA');
+    const date = document.createElement('span');
+    date.textContent = moodDateLabel(entry.date);
+    who.append(name, date);
+    const mood = document.createElement('span');
+    mood.className = 'mood-entry-mood';
+    mood.textContent = entry.mood;
+    head.append(avatar, who, mood);
+    card.append(head);
+    if (entry.note) {
+      const p = document.createElement('p');
+      p.className = 'mood-entry-note';
+      p.textContent = entry.note;
+      card.append(p);
+    }
+    if (entry.cards.length) {
+      const cards = document.createElement('div');
+      cards.className = 'mood-entry-cards';
+      entry.cards.forEach((text) => {
+        const line = document.createElement('div');
+        line.className = 'mood-card-line';
+        line.textContent = '“' + text + '”';
+        cards.append(line);
+      });
+      card.append(cards);
+    }
+    const time = document.createElement('div');
+    time.className = 'mood-entry-time';
+    time.textContent = new Date(entry.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) + ' 记录';
+    card.append(time);
+    list.append(card);
+  });
+}
+
+function saveMoodEntry() {
+  if (!moodSelected) {
+    toast('先选一个今天的心情吧');
+    return;
+  }
+  const today = isoFromDate(new Date());
+  const note = ($('#moodNote')?.value || '').trim().slice(0, 200);
+  const existing = state.moodEntries.find((entry) => entry.from === 'me' && entry.date === today);
+  if (existing) {
+    existing.mood = moodSelected;
+    existing.note = note;
+    existing.time = Date.now();
+  } else {
+    state.moodEntries.push({
+      id: uid(),
+      from: 'me',
+      date: today,
+      mood: moodSelected,
+      note,
+      cards: [],
+      time: Date.now()
+    });
+  }
+  const hasOther = state.moodEntries.some((entry) => entry.from === 'other' && entry.date === today);
+  let otherCards = [];
+  if (!hasOther && state.cards.length && state.moods.length) {
+    const count = 2 + Math.floor(Math.random() * 4);
+    otherCards = pickCards(count).map((card) => card.text.trim()).filter(Boolean);
+    const notes = ['今天也想到了你。', '把今天的小事记在这里。', '看到这些字卡，就想到了你。'];
+    state.moodEntries.push({
+      id: uid(),
+      from: 'other',
+      date: today,
+      mood: state.moods[Math.floor(Math.random() * state.moods.length)],
+      note: notes[Math.floor(Math.random() * notes.length)],
+      cards: otherCards,
+      time: Date.now()
+    });
+  }
+  if (state.moodEntries.length > 240) state.moodEntries = state.moodEntries.slice(-240);
+  save();
+  renderMoodPage();
+  toast(otherCards.length ? `TA 也记下了今天，附了 ${otherCards.length} 张字卡` : '今天的心情已记下');
+}
+
+function openMoodLibrary() {
+  const input = $('#moodLibraryInput');
+  if (input) input.value = state.moods.join('\n');
+  const sheet = $('#moodLibrarySheet');
+  if (!sheet) return;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeMoodLibrary() {
+  const sheet = $('#moodLibrarySheet');
+  if (!sheet) return;
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
+}
+
+function saveMoodLibrary() {
+  const input = $('#moodLibraryInput');
+  const lines = String(input ? input.value : '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const moods = Array.from(new Set(lines.map((line) => line.slice(0, 20)))).slice(0, 30);
+  if (!moods.length) {
+    toast('心情库不能为空');
+    return;
+  }
+  state.moods = moods;
+  if (!state.moods.includes(moodSelected)) moodSelected = state.moods[0];
+  save();
+  closeMoodLibrary();
+  renderMoodPage();
+  toast(`心情库已保存 ${moods.length} 个心情`);
 }
 
 function openCards() {
@@ -11116,6 +12093,8 @@ document.addEventListener('click', (event) => {
   if (event.target.closest('[data-note-close]')) { closeNoteSheet(); return; }
   if (event.target.closest('[data-moment-close]')) { closeMomentSheet(); return; }
   if (event.target.closest('[data-letter-close]')) { closeLetterSheet(); return; }
+  if (event.target.closest('[data-media-close]')) { closeMediaSheet(); return; }
+  if (event.target.closest('[data-mood-lib-close]')) { closeMoodLibrary(); return; }
   if (event.target.closest('[data-survey-detail-close]')) { closeSurveyDetail(); return; }
   if (event.target.closest('[data-survey-history-close]')) { closeSurveyHistory(); return; }
   if (event.target.closest('[data-survey-done-close]')) { closeSurveyDone(); return; }
@@ -11176,6 +12155,14 @@ document.addEventListener('click', (event) => {
       toast('已恢复默认音效');
       return;
     }
+  }
+  const fontBtn = event.target.closest('[data-font-choice]');
+  if (fontBtn) {
+    state.fontFamily = ['sans', 'song', 'round'].includes(fontBtn.dataset.fontChoice) ? fontBtn.dataset.fontChoice : 'sans';
+    applyGlobalFont();
+    fillAppearance();
+    save();
+    return;
   }
   const dropBtn = event.target.closest('[data-drop]');
   if (dropBtn) {
@@ -11260,12 +12247,15 @@ document.addEventListener('click', (event) => {
 composer.addEventListener('submit', (event) => {
   event.preventDefault();
   const text = inputEl.value.trim();
-  if (!text) return;
+  const emoji = pendingEmoji;
+  if (!text && !emoji) return;
   const quote = quoteDraft ? { ...quoteDraft } : null;
   inputEl.value = '';
+  pendingEmoji = '';
+  renderEmojiPreview();
   autoGrow();
   updateSendState();
-  sendUserMessage(text, quote);
+  sendUserMessage(text, quote, emoji);
   clearQuote();
   inputEl.focus();
 });
@@ -11280,9 +12270,159 @@ inputEl.addEventListener('focus', () => closeFnPanel());
 inputEl.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
     event.preventDefault();
-    if (inputEl.value.trim()) composer.requestSubmit();
+    if (inputEl.value.trim() || pendingEmoji) composer.requestSubmit();
   }
 });
+
+/* ---------------- 聊天图片 / 表情 / 语音 ---------------- */
+const chatImageBtn = $('#chatImageBtn');
+const chatImageFile = $('#chatImageFile');
+const chatMediaFile = $('#chatMediaFile');
+const chatEmojiBtn = $('#chatEmojiBtn');
+const chatEmojiPreview = $('#chatEmojiPreview');
+const chatEmojiClear = $('#chatEmojiClear');
+
+if (chatImageBtn && chatImageFile) {
+  chatImageBtn.addEventListener('click', () => chatImageFile.click());
+  chatImageFile.addEventListener('change', async (event) => {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = '';
+    if (!file) return;
+    try {
+      const data = await readChatImage(file, 1200);
+      appendMessage({
+        id: uid(),
+        from: 'me',
+        kind: 'image',
+        image: data,
+        text: '[图片]',
+        time: Date.now()
+      });
+      scheduleReply();
+    } catch (err) {
+      toast(err.message || '图片发送失败');
+    }
+  });
+}
+
+if (chatEmojiBtn) chatEmojiBtn.addEventListener('click', () => openMediaSheet('emojis'));
+if (chatEmojiClear) {
+  chatEmojiClear.addEventListener('click', () => {
+    pendingEmoji = '';
+    renderEmojiPreview();
+  });
+}
+
+const mediaTabsBox = $('#mediaTabs');
+if (mediaTabsBox) {
+  mediaTabsBox.addEventListener('click', (event) => {
+    const tab = event.target.closest('[data-media-tab]');
+    if (!tab) return;
+    mediaTab = tab.dataset.mediaTab === 'emojis' ? 'emojis' : 'stickers';
+    renderMediaSheet();
+  });
+}
+
+const mediaGrid = $('#mediaGrid');
+if (mediaGrid) {
+  mediaGrid.addEventListener('click', (event) => {
+    const item = event.target.closest('[data-media-src]');
+    if (!item) return;
+    if (mediaTab === 'stickers') {
+      sendSticker(item.dataset.mediaSrc);
+    } else {
+      pendingEmoji = item.dataset.mediaSrc;
+      renderEmojiPreview();
+      closeMediaSheet();
+      inputEl.focus();
+    }
+  });
+}
+
+const mediaImportBtn = $('#mediaImportBtn');
+if (mediaImportBtn && chatMediaFile) {
+  mediaImportBtn.addEventListener('click', () => {
+    mediaImportTarget = mediaTab;
+    chatMediaFile.click();
+  });
+  chatMediaFile.addEventListener('change', async (event) => {
+    const files = Array.from(event.target.files || []).slice(0, 20);
+    event.target.value = '';
+    if (!files.length) return;
+    const isSticker = mediaImportTarget === 'stickers';
+    const maxSide = isSticker ? 168 : 64;
+    let added = 0;
+    for (const file of files) {
+      try {
+        const data = await readChatImage(file, maxSide);
+        if (isSticker) {
+          state.stickers.push(data);
+          if (state.stickers.length > 30) state.stickers = state.stickers.slice(-30);
+        } else {
+          state.emojis.push(data);
+          if (state.emojis.length > 40) state.emojis = state.emojis.slice(-40);
+        }
+        added += 1;
+      } catch (err) {
+        // skip unreadable file
+      }
+    }
+    if (!added) {
+      toast('没有成功导入图片');
+      return;
+    }
+    save();
+    renderMediaSheet();
+    toast(`已导入 ${added} 张${isSticker ? '表情包' : ' emoji'}`);
+  });
+}
+
+const mediaClearBtn = $('#mediaClearBtn');
+if (mediaClearBtn) {
+  mediaClearBtn.addEventListener('click', () => {
+    if (mediaTab === 'stickers' ? !state.stickers.length : !state.emojis.length) return;
+    if (!window.confirm('确定要全部清空吗？')) return;
+    if (mediaTab === 'stickers') state.stickers = [];
+    else state.emojis = [];
+    save();
+    renderMediaSheet();
+  });
+}
+
+const chatVoiceBtn = $('#chatVoiceBtn');
+const voiceSendBtn = $('#voiceSendBtn');
+const voiceCancelBtn = $('#voiceCancelBtn');
+if (chatVoiceBtn) chatVoiceBtn.addEventListener('click', startVoiceDraft);
+if (voiceSendBtn) voiceSendBtn.addEventListener('click', sendVoiceDraft);
+if (voiceCancelBtn) voiceCancelBtn.addEventListener('click', closeVoiceDraft);
+
+/* ---------------- 心晴日记 ---------------- */
+const moodChoices = $('#moodChoices');
+if (moodChoices) {
+  moodChoices.addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-mood]');
+    if (!btn) return;
+    moodSelected = btn.dataset.mood;
+    $$('#moodChoices [data-mood]').forEach((choice) => choice.classList.toggle('on', choice === btn));
+  });
+}
+const moodSaveBtn = $('#moodSaveBtn');
+if (moodSaveBtn) moodSaveBtn.addEventListener('click', saveMoodEntry);
+const moodLibraryBtn = $('#moodLibraryBtn');
+if (moodLibraryBtn) moodLibraryBtn.addEventListener('click', openMoodLibrary);
+const moodLibrarySave = $('#moodLibrarySave');
+if (moodLibrarySave) moodLibrarySave.addEventListener('click', saveMoodLibrary);
+const moodLibraryReset = $('#moodLibraryReset');
+if (moodLibraryReset) {
+  moodLibraryReset.addEventListener('click', () => {
+    state.moods = DEFAULT_MOODS.slice();
+    moodSelected = state.moods[0];
+    save();
+    closeMoodLibrary();
+    renderMoodPage();
+    toast('已恢复默认心情');
+  });
+}
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
@@ -11290,6 +12430,10 @@ document.addEventListener('keydown', (event) => {
     if (patSheet && patSheet.classList.contains('open')) { closePatPicker(); return; }
     const letterSheet = $('#letterSheet');
     if (letterSheet && letterSheet.classList.contains('open')) { closeLetterSheet(); return; }
+    const mediaSheetEl = $('#mediaSheet');
+    if (mediaSheetEl && mediaSheetEl.classList.contains('open')) { closeMediaSheet(); return; }
+    const moodLibrarySheetEl = $('#moodLibrarySheet');
+    if (moodLibrarySheetEl && moodLibrarySheetEl.classList.contains('open')) { closeMoodLibrary(); return; }
     const surveyDoneSheet = $('#surveyDoneSheet');
     if (surveyDoneSheet && surveyDoneSheet.classList.contains('open')) { closeSurveyDone(); return; }
     const surveyHistorySheet = $('#surveyHistorySheet');
@@ -11679,6 +12823,41 @@ $('#setTyping').addEventListener('change', (event) => {
   if (!state.settings.typing) hideTyping();
   save();
 });
+
+const autoMessageSwitch = $('#setAutoMessage');
+if (autoMessageSwitch) {
+  autoMessageSwitch.addEventListener('change', (event) => {
+    state.settings.autoMessage = event.target.checked;
+    save();
+    scheduleAutoMessage();
+    toast(state.settings.autoMessage ? '已开启主动发消息' : '已关闭主动发消息');
+  });
+}
+
+const autoMessageInterval = $('#setAutoMessageInterval');
+if (autoMessageInterval) {
+  autoMessageInterval.addEventListener('input', () => {
+    const seconds = clamp(Number(autoMessageInterval.value) || 90, 10, 600);
+    state.settings.autoMessageInterval = seconds;
+    const label = $('#autoMessageIntervalVal');
+    if (label) label.textContent = fmtAutoInterval(seconds);
+    updateRangeFill(autoMessageInterval);
+    save();
+  });
+  autoMessageInterval.addEventListener('change', () => {
+    if (state.settings.autoMessage) scheduleAutoMessage();
+  });
+}
+
+const keepAliveSwitch = $('#setKeepAlive');
+if (keepAliveSwitch) {
+  keepAliveSwitch.addEventListener('change', (event) => {
+    state.settings.keepAlive = event.target.checked;
+    save();
+    applyKeepAlive();
+    toast(state.settings.keepAlive ? '后台保活已开启' : '后台保活已关闭');
+  });
+}
 
 const callsSwitch = $('#setCalls');
 if (callsSwitch) {
@@ -12491,6 +13670,7 @@ if (homeBtn) {
 /* ---------------- 启动 ---------------- */
 buildDropsPattern();
 initTheme();
+applyGlobalFont();
 applyWallpaper();
 applyDropStyle();
 save();
@@ -12513,11 +13693,15 @@ renderGiftShop();
 renderSurveys();
 renderSurveyHistory();
 updateSurveyHistoryBadge();
+renderMoodPage();
+renderEmojiPreview();
+applyKeepAlive();
 window.setInterval(renderHomeClock, 20000);
 scheduleIncomingCall();
 scheduleTransfer();
 scheduleMoment();
 scheduleStatusRotate();
+scheduleAutoMessage();
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) renderHomeClock();
